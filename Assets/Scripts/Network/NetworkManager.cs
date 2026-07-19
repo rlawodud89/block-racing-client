@@ -1,6 +1,7 @@
 using block_racing_common.Network;
-using UnityEngine;
+using block_racing_common.Network.Packets;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class NetworkManager : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class NetworkManager : MonoBehaviour
             InitializeNetwork();
 
             await _session.ConnectAsync("127.0.0.1", 7777);
+
+            await SendLogin();
         }
         else
         {
@@ -40,6 +43,16 @@ public class NetworkManager : MonoBehaviour
 
         _session = new ClientSession(
             _packetManager);
+    }
+
+    private async Task SendLogin()
+    {
+        var packet = new C_LoginPacket()
+        {
+            Nickname = "TestPlayer"
+        };
+
+        await SendAsync(packet);
     }
 
     public Task SendAsync(IPacket packet)
