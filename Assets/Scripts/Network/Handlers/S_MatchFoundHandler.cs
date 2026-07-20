@@ -10,7 +10,8 @@ public static class S_MatchFoundHandler
         Debug.Log(
             $"Match Found. RoomId : {packet.RoomId}");
 
-        // 이후 추가
-        // MatchManager.Instance.SetRoom(packet.RoomId);
+        MatchContext.RoomId = packet.RoomId;
+
+        MatchEvents.RaiseMatchFound();
     }
 }
