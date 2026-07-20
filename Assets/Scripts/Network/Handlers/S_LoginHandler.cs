@@ -7,5 +7,12 @@ public static class S_LoginHandler
     {
         Debug.Log(
             $"Login Success PlayerId : {packet.PlayerId}");
+
+        ClientContext.SetLogin(
+            packet.PlayerId,
+            packet.Nickname
+        );
+
+        LoginEvents.RaiseSuccess();
     }
 }
