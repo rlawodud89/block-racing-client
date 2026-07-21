@@ -8,8 +8,7 @@ public static class S_StartGameHandler
         Debug.Log(
             $"Game Start. RoomId : {packet.RoomId}");
 
-        // 이후 추가
-        // GameManager.Instance.StartGame();
+        GameEvents.InvokeStartGameReceived(packet);
     }
 }
 
