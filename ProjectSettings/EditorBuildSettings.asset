@@ -8,4 +8,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Bootstrap.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Title.unity
+    guid: ebf90d50b3f027145b75c4bf491442d0
+  - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: 7d92550fb3490db43acd2adbe45b5fb6
+  - enabled: 1
+    path: Assets/Scenes/Game.unity
+    guid: f6af3362b42269a41a255071ccdc30e4
+  - enabled: 1
+    path: Assets/Scenes/Result.unity
+    guid: 5f7949453b7cc1148bdf8a63d862106a
   m_configObjects: {}
