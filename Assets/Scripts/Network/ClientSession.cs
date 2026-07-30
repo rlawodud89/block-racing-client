@@ -64,9 +64,9 @@ public class ClientSession
                 }
             }
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            Debug.Log($"ReceiveLoopAsync Exception: {ex.Message}");
+            Debug.LogException(ex);
         }
         finally
         {
