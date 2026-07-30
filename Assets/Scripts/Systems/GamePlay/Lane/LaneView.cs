@@ -1,4 +1,5 @@
 using block_racing_common.Game.Snapshots;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,10 +9,14 @@ public class LaneView : MonoBehaviour
     [SerializeField] private Transform gridRoot;
     [SerializeField] private BlockView blockPrefab;
 
+    [SerializeField] private Transform flyingRoot;
+    [SerializeField] private FlyingBlockView flyingBlockPrefab;
+
     private const int Width = 5;
     private const int Height = 20;
 
     private BlockView[] _blocks;
+    private List<FlyingBlockView> _flyingBlocks = new();
 
     private void Awake()
     {
@@ -95,12 +100,50 @@ public class LaneView : MonoBehaviour
         {
             _blocks[i].SetBlock(snapshot.Blocks[i]);
         }
+
+        UpdateFlyingBlocks(snapshot);
     }
 
 
     private void UpdateFlyingBlocks(LaneSnapshot snapshot)
     {
-        // 다음 단계에서 구현
+        var flyingSnapshots = snapshot.FlyingBlocks;
+
+
+        // 필요한 만큼 생성
+        while (_flyingBlocks.Count < flyingSnapshots.Count)
+        {
+            FlyingBlockView view =
+                Instantiate(
+                    flyingBlockPrefab,
+                    flyingRoot);
+
+            _flyingBlocks.Add(view);
+        }
+
+
+        // 활성 FlyingBlock 업데이트
+        for (int i = 0; i < flyingSnapshots.Count; i++)
+        {
+            FlyingBlockView view =
+                _flyingBlocks[i];
+
+            view.gameObject.SetActive(true);
+
+            view.UpdateBlock(
+                flyingSnapshots[i]);
+        }
+
+
+        // 남는 View 비활성화
+        for (int i = flyingSnapshots.Count;
+             i < _flyingBlocks.Count;
+             i++)
+        {
+            _flyingBlocks[i]
+                .gameObject
+                .SetActive(false);
+        }
     }
 
 }
