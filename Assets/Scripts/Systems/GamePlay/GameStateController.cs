@@ -61,8 +61,8 @@ public class GameStateController : MonoBehaviour
         opponentLaneView.UpdateLane(opponentSnapshot.Lane);
 
         // 차 위치
-        //myCarView.UpdateCar(mySnapshot.CarX);
-        //opponentCarView.UpdateCar(opponentSnapshot.CarX);
+        myCarView.UpdateCar(mySnapshot.CarX);
+        opponentCarView.UpdateCar(opponentSnapshot.CarX);
 
         //// 내 모드 UI
         //myPlayerUI.UpdateMode(mySnapshot.Mode);

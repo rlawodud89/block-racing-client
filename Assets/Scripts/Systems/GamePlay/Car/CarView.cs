@@ -1,18 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using block_racing_common.Game.Snapshots;
 
 public class CarView : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private const float CellWidth = 100f;
+
+    private RectTransform _rect;
+
+
+    private void Awake()
     {
-        
+        _rect = GetComponent<RectTransform>();
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void UpdateCar(int carX)
     {
-        
+        _rect.anchoredPosition =
+            new Vector2(
+                carX * CellWidth,
+                0
+            );
     }
 }
