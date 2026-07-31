@@ -15,6 +15,7 @@ public class PacketManager
         Register<S_MatchFoundPacket>(PacketId.S_MatchFound, S_MatchFoundHandler.Handle);
         Register<S_StartGamePacket>(PacketId.S_StartGame, S_StartGameHandler.Handle);
         Register<S_GameStatePacket>(PacketId.S_GameState, S_GameStateHandler.Handle);
+        Register<S_GameEndPacket>(PacketId.S_GameEnd, S_GameEndHandler.Handle);
     }
 
     public void Register<T>(
