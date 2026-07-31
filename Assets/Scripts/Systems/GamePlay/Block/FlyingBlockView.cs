@@ -1,6 +1,7 @@
-using UnityEngine;
-using block_racing_common.Game.Snapshots;
 using block_racing_common.Game.Pieces;
+using block_racing_common.Game.Snapshots;
+using System.Linq;
+using UnityEngine;
 
 public class FlyingBlockView : MonoBehaviour
 {
@@ -47,6 +48,8 @@ public class FlyingBlockView : MonoBehaviour
                 snapshot.Type,
                 snapshot.Rotation);
 
+        int minX = shape.Min(cell => cell.X);
+        int minY = shape.Min(cell => cell.Y);
 
         for (int i = 0; i < cells.Length; i++)
         {
@@ -63,11 +66,15 @@ public class FlyingBlockView : MonoBehaviour
             RectTransform cellRect =
                 cells[i].GetComponent<RectTransform>();
 
+            cellRect.anchorMin = Vector2.zero;
+            cellRect.anchorMax = Vector2.zero;
+            cellRect.pivot = Vector2.zero;
+
             // Piece ³»ºÎ ÁÂÇ¥
             cellRect.anchoredPosition =
                 new Vector2(
-                    shape[i].X * CellWidth,
-                    shape[i].Y * CellHeight
+                    (shape[i].X - minX) * CellWidth,
+                    (shape[i].Y - minY) * CellHeight
                 );
         }
     }
