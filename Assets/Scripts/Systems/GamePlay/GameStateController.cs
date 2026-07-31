@@ -65,6 +65,6 @@ public class GameStateController : MonoBehaviour
         opponentCarView.UpdateCar(opponentSnapshot.CarX);
 
         //// ³» ¸ðµå UI
-        //myPlayerUI.UpdateMode(mySnapshot.Mode);
+        myPlayerUI.UpdateUI(mySnapshot);
     }
 }
