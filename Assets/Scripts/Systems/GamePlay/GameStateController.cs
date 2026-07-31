@@ -12,6 +12,9 @@ public class GameStateController : MonoBehaviour
     [SerializeField] private CarView myCarView;
     [SerializeField] private CarView opponentCarView;
 
+    [SerializeField] private FinishLineView myFinishLineView;
+    [SerializeField] private FinishLineView opponentFinishLineView;
+
     [SerializeField] private PlayerUI myPlayerUI;
 
     private long _lastTick = -1;
@@ -63,6 +66,10 @@ public class GameStateController : MonoBehaviour
         // 차 위치
         myCarView.UpdateCar(mySnapshot.CarX);
         opponentCarView.UpdateCar(opponentSnapshot.CarX);
+
+        // 결승선 위치
+        myFinishLineView.UpdateFinishLine(mySnapshot.Distance, snapshot.TargetDistance);
+        opponentFinishLineView.UpdateFinishLine(opponentSnapshot.Distance, snapshot.TargetDistance);
 
         //// 내 모드 UI
         myPlayerUI.UpdateUI(mySnapshot);

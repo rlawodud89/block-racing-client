@@ -644,6 +644,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 634d5fa3a054f684985431c428e31783, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &619360673 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1125974361428278756, guid: 2049933fef154984e9d9657db727f6bf, type: 3}
+  m_PrefabInstance: {fileID: 619360669}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9116a68bb5fc3484bb1a792c3d9118cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &680738901
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,6 +780,8 @@ MonoBehaviour:
   opponentLaneView: {fileID: 619360672}
   myCarView: {fileID: 746899092}
   opponentCarView: {fileID: 619360671}
+  myFinishLineView: {fileID: 746899094}
+  opponentFinishLineView: {fileID: 619360673}
   myPlayerUI: {fileID: 6967731298968786237}
 --- !u!4 &731180665
 Transform:
@@ -907,6 +920,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 634d5fa3a054f684985431c428e31783, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &746899094 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1125974361428278756, guid: 2049933fef154984e9d9657db727f6bf, type: 3}
+  m_PrefabInstance: {fileID: 746899090}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9116a68bb5fc3484bb1a792c3d9118cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &987547783
