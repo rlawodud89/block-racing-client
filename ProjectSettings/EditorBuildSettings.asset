@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Result.unity
     guid: 5f7949453b7cc1148bdf8a63d862106a
+  - enabled: 1
+    path: Assets/Scenes/MatchCanceled.unity
+    guid: 183231cc68130a847acfe8fbab61b853
   m_configObjects: {}
