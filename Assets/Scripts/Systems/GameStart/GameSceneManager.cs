@@ -3,6 +3,16 @@ using UnityEngine;
 
 public class GameSceneManager : MonoBehaviour
 {
+    private void OnEnable()
+    {
+        MatchEvents.OnMatchCanceled += HandleMatchCanceled;
+    }
+
+    private void OnDisable()
+    {
+        MatchEvents.OnMatchCanceled -= HandleMatchCanceled;
+    }
+
     private async void Start()
     {
         try
@@ -15,5 +25,14 @@ public class GameSceneManager : MonoBehaviour
         {
             Debug.LogError(e);
         }
+    }
+
+    private void HandleMatchCanceled()
+    {
+        Debug.Log("Match canceled");
+
+        StartCoroutine(
+            SceneLoader.ChangeScene("MatchCanceled")
+        );
     }
 }
