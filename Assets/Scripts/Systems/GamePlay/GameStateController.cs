@@ -64,8 +64,8 @@ public class GameStateController : MonoBehaviour
         opponentLaneView.UpdateLane(opponentSnapshot.Lane);
 
         // 차 위치
-        myCarView.UpdateCar(mySnapshot.CarX);
-        opponentCarView.UpdateCar(opponentSnapshot.CarX);
+        myCarView.UpdateCar(mySnapshot.CarX, mySnapshot.IsStunned);
+        opponentCarView.UpdateCar(opponentSnapshot.CarX, opponentSnapshot.IsStunned);
 
         // 결승선 위치
         myFinishLineView.UpdateFinishLine(mySnapshot.Distance, snapshot.TargetDistance);
