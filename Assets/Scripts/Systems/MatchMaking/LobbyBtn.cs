@@ -6,8 +6,6 @@ public class LobbyBtn : MonoBehaviour
 {
     public void OnClickLobbyBtn()
     {
-        StartCoroutine(
-            SceneLoader.ChangeScene("Lobby")
-        );
+        SceneLoader.Instance.LoadScene("Lobby");
     }
 }

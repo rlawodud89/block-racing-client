@@ -99,6 +99,8 @@ public class MatchController : MonoBehaviour
             StopCoroutine(matchCoroutine);
         }
 
-        StartCoroutine(SceneLoader.ChangeScene("Game"));
+        Debug.Log($"[MatchController] LoadGame »£√‚");
+
+        SceneLoader.Instance.LoadScene("Game");
     }
 }

@@ -17,8 +17,6 @@ public class BootstrapLoader : MonoBehaviour
 
     private void LoadTitle()
     {
-        StartCoroutine(
-            SceneLoader.ChangeScene("Title")
-        );
+        SceneLoader.Instance.LoadScene("Title");
     }
 }

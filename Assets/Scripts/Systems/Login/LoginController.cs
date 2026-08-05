@@ -31,8 +31,6 @@ public class LoginController : MonoBehaviour
 
     private void LoadLobby()
     {
-        StartCoroutine(
-            SceneLoader.ChangeScene("Lobby")
-        );
+        SceneLoader.Instance.LoadScene("Lobby");
     }
 }

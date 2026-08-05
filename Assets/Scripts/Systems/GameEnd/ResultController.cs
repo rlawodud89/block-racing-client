@@ -29,8 +29,6 @@ public class ResultController : MonoBehaviour
     {
         ResultData.Clear();
 
-        StartCoroutine(
-            SceneLoader.ChangeScene("Lobby")
-        );
+        SceneLoader.Instance.LoadScene("Lobby");
     }
 }

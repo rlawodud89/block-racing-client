@@ -25,8 +25,6 @@ public class GameEndController : MonoBehaviour
 
         Debug.Log("Loading Result Scene...");
 
-        StartCoroutine(
-            SceneLoader.ChangeScene("Result")
-        );
+        SceneLoader.Instance.LoadScene("Result");
     }
 }
