@@ -31,8 +31,6 @@ public class GameSceneManager : MonoBehaviour
     {
         Debug.Log("Match canceled");
 
-        StartCoroutine(
-            SceneLoader.ChangeScene("MatchCanceled")
-        );
+        SceneLoader.Instance.LoadScene("MatchCanceled");
     }
 }
