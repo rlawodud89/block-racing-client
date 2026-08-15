@@ -1,8 +1,7 @@
 using block_racing_common.Network;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ClientSession
@@ -13,7 +12,7 @@ public class ClientSession
     private readonly ReceiveBuffer _receiveBuffer = new();
     private readonly PacketManager _packetManager;
 
-    public bool _isConnected;
+    private bool _isConnected;
 
     public bool IsConnected => _isConnected;
 
@@ -22,14 +21,13 @@ public class ClientSession
         _packetManager = packetManager;
     }
 
-
     public async Task ConnectAsync(string ip, int port)
     {
         _client = new TcpClient();
+
         await _client.ConnectAsync(ip, port);
 
         _stream = _client.GetStream();
-
         _isConnected = true;
 
         _ = ReceiveLoopAsync();
@@ -37,9 +35,15 @@ public class ClientSession
 
     public async Task SendAsync(IPacket packet)
     {
+        if (!_isConnected)
+            return;
+
         var writer = new PacketWriter((ushort)packet.PacketId);
+
         packet.Write(writer);
+
         byte[] buffer = writer.ToArray();
+
         await _stream.WriteAsync(buffer, 0, buffer.Length);
     }
 
@@ -49,9 +53,13 @@ public class ClientSession
 
         try
         {
-            while (IsConnected)
+            while (_isConnected)
             {
-                int read = await _stream.ReadAsync(tempBuffer, 0, tempBuffer.Length);
+                int read = await _stream.ReadAsync(
+                    tempBuffer,
+                    0,
+                    tempBuffer.Length
+                );
 
                 if (read == 0)
                     break;
@@ -64,6 +72,10 @@ public class ClientSession
                 }
             }
         }
+        catch (ObjectDisposedException)
+        {
+            // Disconnect()¿¡ ÀÇÇØ StreamÀÌ ´ÝÈù °æ¿ì
+        }
         catch (Exception ex)
         {
             Debug.LogException(ex);
@@ -72,7 +84,6 @@ public class ClientSession
         {
             Disconnect();
         }
-
     }
 
     private void ProcessPacket(byte[] packet)
@@ -91,9 +102,15 @@ public class ClientSession
 
     public void Disconnect()
     {
+        if (!_isConnected)
+            return;
+
         _isConnected = false;
 
         _stream?.Close();
+        _stream = null;
+
         _client?.Close();
+        _client = null;
     }
 }

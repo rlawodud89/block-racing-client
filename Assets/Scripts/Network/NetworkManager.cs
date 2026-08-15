@@ -48,8 +48,18 @@ public class NetworkManager : MonoBehaviour
         return _session.SendAsync(packet);
     }
 
+    public void Shutdown()
+    {
+        Destroy(gameObject);
+    }
+
     private void OnDestroy()
     {
-        _session.Disconnect();
+        _session?.Disconnect();
+
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 }
