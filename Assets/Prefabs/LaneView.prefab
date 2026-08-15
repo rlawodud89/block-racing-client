@@ -132,6 +132,7 @@ MonoBehaviour:
   blockPrefab: {fileID: 2876142249617599773, guid: 0f1d6b820ef0e05438b422ec6490083c, type: 3}
   flyingRoot: {fileID: 2585357446777402461}
   flyingBlockPrefab: {fileID: 4421094455859816778, guid: 471dc31264ce4174488e6a9f3f670402, type: 3}
+  laneScroller: {fileID: 8071464486173436861}
 --- !u!1 &4049659339333207885
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,6 +304,7 @@ GameObject:
   - component: {fileID: 3073285214884697539}
   - component: {fileID: 4377850473679804527}
   - component: {fileID: 380864162067419912}
+  - component: {fileID: 8071464486173436861}
   m_Layer: 5
   m_Name: LaneSurface
   m_TagString: Untagged
@@ -364,6 +366,19 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 11
+--- !u!114 &8071464486173436861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4167631238578678731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14af7356982417b4bae7507c576bac89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedMultiplier: 0.5
 --- !u!1001 &65315898400505230
 PrefabInstance:
   m_ObjectHideFlags: 0

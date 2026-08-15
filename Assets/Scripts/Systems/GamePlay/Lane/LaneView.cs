@@ -12,6 +12,8 @@ public class LaneView : MonoBehaviour
     [SerializeField] private Transform flyingRoot;
     [SerializeField] private FlyingBlockView flyingBlockPrefab;
 
+    [SerializeField] private LaneScroller laneScroller;
+
     private const int Width = 5;
     private const int Height = 20;
 
@@ -69,7 +71,7 @@ public class LaneView : MonoBehaviour
         }
     }
 
-    public void UpdateLane(LaneSnapshot snapshot)
+    public void UpdateLane(LaneSnapshot snapshot, float carSpeed)
     {
         if (snapshot == null)
         {
@@ -95,6 +97,9 @@ public class LaneView : MonoBehaviour
             Debug.LogError("Block count mismatch.");
             return;
         }
+
+
+        laneScroller.SetScrollSpeed(carSpeed);
 
         for (int i = 0; i < snapshot.Blocks.Length; i++)
         {
