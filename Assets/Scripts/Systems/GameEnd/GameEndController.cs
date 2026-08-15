@@ -23,6 +23,8 @@ public class GameEndController : MonoBehaviour
 
         ResultData.SetResult(packet.Result, packet.Reason);
 
+        GameStateController.Instance.StopGameState();
+
         Debug.Log("Loading Result Scene...");
 
         SceneLoader.Instance.LoadScene("Result");

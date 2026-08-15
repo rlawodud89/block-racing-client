@@ -12,10 +12,15 @@ public class BlockView : MonoBehaviour
 
     public void SetBlock(byte data)
     {
-        image.enabled = data != 0;
+        if (image == null)
+        {
+            Debug.LogWarning(
+                $"[BlockView] Image is already destroyed. Object={gameObject.name}"
+            );
 
-        // TODO :
-        // blockData를 이용해서
-        // 색상이나 Sprite 변경
+            return;
+        }
+
+        image.enabled = data != 0;
     }
 }

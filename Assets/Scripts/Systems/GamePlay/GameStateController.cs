@@ -18,14 +18,31 @@ public class GameStateController : MonoBehaviour
     [SerializeField] private PlayerUI myPlayerUI;
 
     private long _lastTick = -1;
+    private bool _isGameEnded = false;
 
     private void Awake()
     {
         Instance = this;
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
+
+    public void StopGameState()
+    {
+        _isGameEnded = true;
+    }
+
     public void ApplySnapshot(GameStateSnapshot snapshot)
     {
+        if (_isGameEnded)
+            return;
+
         // ¿À·¡µÈ ½º³À¼¦Àº ¹«½Ã
         if (snapshot.Tick <= _lastTick)
             return;
