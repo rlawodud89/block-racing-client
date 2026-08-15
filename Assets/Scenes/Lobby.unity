@@ -288,7 +288,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.000030517578}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &680738901
@@ -327,7 +327,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.38823533, g: 0.76470596, b: 0.4666667, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 696791708}
   - component: {fileID: 696791707}
   m_Layer: 5
-  m_Name: CarInven Scroll View
+  m_Name: Ranking Scroll View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -881,7 +881,7 @@ GameObject:
   - component: {fileID: 1209908879}
   - component: {fileID: 1209908878}
   m_Layer: 5
-  m_Name: MoneyBar
+  m_Name: WinBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1027,8 +1027,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1611565313}
   m_HandleRect: {fileID: 1611565312}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.625
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1922,8 +1922,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000087261, y: -109}
-  m_SizeDelta: {x: 292.0497, y: 491.9919}
+  m_AnchoredPosition: {x: -0.00014496, y: -109}
+  m_SizeDelta: {x: 415.812, y: 491.992}
   m_Pivot: {x: 0.4999997, y: 0.49999997}
 --- !u!114 &1873659594
 MonoBehaviour:
@@ -1945,7 +1945,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 058acc244e545e948bffdcd4386f9ad5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
