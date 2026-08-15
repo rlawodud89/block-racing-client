@@ -58,10 +58,10 @@ public class GameStateController : MonoBehaviour
         }
 
         // 내 Lane은 항상 왼쪽
-        myLaneView.UpdateLane(mySnapshot.Lane);
+        myLaneView.UpdateLane(mySnapshot.Lane, mySnapshot.Speed);
 
         // 상대 Lane은 항상 오른쪽
-        opponentLaneView.UpdateLane(opponentSnapshot.Lane);
+        opponentLaneView.UpdateLane(opponentSnapshot.Lane, opponentSnapshot.Speed);
 
         // 차 위치
         myCarView.UpdateCar(mySnapshot.CarX, mySnapshot.IsStunned);
