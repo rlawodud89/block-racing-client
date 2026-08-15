@@ -19,9 +19,9 @@ public class GameEndController : MonoBehaviour
 
     private void HandleGameEnded(S_GameEndPacket packet)
     {
-        Debug.Log($"GameEndController received: {packet.Result}");
+        Debug.Log($"GameEndController received: {packet.Result}, {packet.Reason}");
 
-        ResultData.SetResult(packet.Result);
+        ResultData.SetResult(packet.Result, packet.Reason);
 
         Debug.Log("Loading Result Scene...");
 

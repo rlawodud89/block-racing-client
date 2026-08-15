@@ -6,6 +6,8 @@ public class ResultController : MonoBehaviour
 {
     [SerializeField]
     private TMP_Text resultText;
+    [SerializeField]
+    private TMP_Text opponentDisconnectedText;
 
     private void Start()
     {
@@ -21,6 +23,16 @@ public class ResultController : MonoBehaviour
 
             case GameResultType.Draw:
                 resultText.text = "¹«½ÂºÎ";
+                break;
+        }
+
+        switch (ResultData.Reason)
+        {
+            case GameEndReason.Normal:
+                opponentDisconnectedText.gameObject.SetActive(false);
+                break;
+            case GameEndReason.OpponentDisconnected:
+                opponentDisconnectedText.gameObject.SetActive(true);
                 break;
         }
     }
