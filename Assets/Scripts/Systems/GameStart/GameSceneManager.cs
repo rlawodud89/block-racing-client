@@ -5,12 +5,12 @@ public class GameSceneManager : MonoBehaviour
 {
     private void OnEnable()
     {
-        MatchEvents.OnMatchCanceled += HandleMatchCanceled;
+        RoomEvents.OnGameCanceled += HandleMatchCanceled;
     }
 
     private void OnDisable()
     {
-        MatchEvents.OnMatchCanceled -= HandleMatchCanceled;
+        RoomEvents.OnGameCanceled -= HandleMatchCanceled;
     }
 
     private async void Start()

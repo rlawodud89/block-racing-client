@@ -14,12 +14,12 @@ public class MatchController : MonoBehaviour
 
     private void Awake()
     {
-        MatchEvents.OnMatchFound += LoadGame;
+        RoomEvents.OnRoomReady += LoadGame;
     }
 
     private void OnDestroy()
     {
-        MatchEvents.OnMatchFound -= LoadGame;
+        RoomEvents.OnRoomReady -= LoadGame;
     }
 
     public void OnClickMatch()

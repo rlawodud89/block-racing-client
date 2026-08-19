@@ -12,11 +12,11 @@ public class PacketManager
     public PacketManager()
     {
         Register<S_LoginPacket>(PacketId.S_Login, S_LoginHandler.Handle);
-        Register<S_MatchFoundPacket>(PacketId.S_MatchFound, S_MatchFoundHandler.Handle);
+        Register<S_RoomReadyPacket>(PacketId.S_RoomReady, S_RoomReadyHandler.Handle);
         Register<S_StartGamePacket>(PacketId.S_StartGame, S_StartGameHandler.Handle);
         Register<S_GameStatePacket>(PacketId.S_GameState, S_GameStateHandler.Handle);
         Register<S_GameEndPacket>(PacketId.S_GameEnd, S_GameEndHandler.Handle);
-        Register<S_MatchCanceledPacket>(PacketId.S_MatchCanceled, S_MatchCanceledHandler.Handle);
+        Register<S_GameCanceledPacket>(PacketId.S_GameCanceled, S_GameCanceledHandler.Handle);
         Register<S_RoomCreatedPacket>(PacketId.S_RoomCreated, S_RoomCreatedHandler.Handle);
         Register<S_RoomJoinedPacket>(PacketId.S_RoomJoined, S_RoomJoinedHandler.Handle);
     }
