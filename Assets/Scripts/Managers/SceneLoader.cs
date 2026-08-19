@@ -39,6 +39,9 @@ public class SceneLoader : MonoBehaviour
 
         _isLoading = true;
 
+        // 씬 전환 시 기존 WarningUI 닫기
+        WarningUI.Instance?.Hide();
+
         Scene currentScene = SceneManager.GetActiveScene();
 
         // 이미 로드되어 있는지 확인
