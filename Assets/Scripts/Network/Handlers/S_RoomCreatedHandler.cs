@@ -8,7 +8,10 @@ public static class S_RoomCreatedHandler
     public static void Handle(S_RoomCreatedPacket packet)
     {
         if (!packet.Success)
+        {
+            RoomEvents.RaiseRoomCreateFailed();
             return;
+        }
 
         RoomEvents.RaiseRoomCreated(packet.RoomCode);
     }

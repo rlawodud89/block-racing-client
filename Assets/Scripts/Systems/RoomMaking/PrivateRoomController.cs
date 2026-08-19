@@ -16,6 +16,7 @@ public class PrivateRoomController : MonoBehaviour
     {
         RoomEvents.OnRoomCreated += HandleRoomCreated;
         RoomEvents.OnRoomJoined += HandleRoomJoined;
+        RoomEvents.OnRoomCreateFailed += HandleRoomCreateFailed;
         RoomEvents.OnRoomJoinFailed += HandleRoomJoinFailed;
     }
 
@@ -23,6 +24,7 @@ public class PrivateRoomController : MonoBehaviour
     {
         RoomEvents.OnRoomCreated -= HandleRoomCreated;
         RoomEvents.OnRoomJoined -= HandleRoomJoined;
+        RoomEvents.OnRoomCreateFailed -= HandleRoomCreateFailed;
         RoomEvents.OnRoomJoinFailed -= HandleRoomJoinFailed;
     }
 
@@ -83,10 +85,17 @@ public class PrivateRoomController : MonoBehaviour
         joinRoomPanel.SetActive(false);
     }
 
+    private void HandleRoomCreateFailed()
+    {
+        Debug.Log("Room Create Failed.");
+
+        WarningUI.Instance?.Show("방 생성에 실패했습니다.");
+    }
+
     private void HandleRoomJoinFailed()
     {
         Debug.Log("Room Join Failed.");
 
-        // "존재하지 않는 방입니다." 같은 메시지 표시
+        WarningUI.Instance?.Show("들어갈 수 없는 방입니다.");
     }
 }
