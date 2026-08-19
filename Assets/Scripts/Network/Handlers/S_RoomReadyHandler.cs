@@ -12,6 +12,6 @@ public static class S_RoomReadyHandler
 
         MatchContext.RoomId = packet.RoomId;
 
-        RoomEvents.RaiseGameCanceled();
+        RoomEvents.RaiseRoomReady();
     }
 }

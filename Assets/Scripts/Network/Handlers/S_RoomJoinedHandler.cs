@@ -9,10 +9,10 @@ public static class S_RoomJoinedHandler
     {
         if (!packet.Success)
         {
-            PrivateRoomEvents.RaiseRoomJoinFailed();
+            RoomEvents.RaiseRoomJoinFailed();
             return;
         }
 
-        PrivateRoomEvents.RaiseRoomJoined(packet.RoomId);
+        RoomEvents.RaiseRoomJoined(packet.RoomId);
     }
 }

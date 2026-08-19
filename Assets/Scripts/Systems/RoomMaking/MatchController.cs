@@ -14,12 +14,17 @@ public class MatchController : MonoBehaviour
 
     private void Awake()
     {
-        RoomEvents.OnRoomReady += LoadGame;
+        RoomEvents.OnRoomReady += HandleRoomReady;
     }
 
     private void OnDestroy()
     {
-        RoomEvents.OnRoomReady -= LoadGame;
+        RoomEvents.OnRoomReady -= HandleRoomReady;
+    }
+
+    private void HandleRoomReady()
+    {
+        StopMatchingUI();
     }
 
     public void OnClickMatch()
@@ -61,11 +66,7 @@ public class MatchController : MonoBehaviour
 
         _ = NetworkManager.Instance.SendAsync(packet);
 
-        isMatching = false;
-
-        MatchingTime.SetActive(false);
-
-        MatchButtonText.text = "시작";
+        StopMatchingUI();
 
         if (matchCoroutine != null)
         {
@@ -90,17 +91,18 @@ public class MatchController : MonoBehaviour
         }
     }
 
-    private void LoadGame()
+    private void StopMatchingUI()
     {
         isMatching = false;
+
+        MatchingTime.SetActive(false);
 
         if (matchCoroutine != null)
         {
             StopCoroutine(matchCoroutine);
+            matchCoroutine = null;
         }
 
-        Debug.Log($"[MatchController] LoadGame 호출");
-
-        SceneLoader.Instance.LoadScene("Game");
+        MatchButtonText.text = "매칭 시작";
     }
 }

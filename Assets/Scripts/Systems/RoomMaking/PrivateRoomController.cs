@@ -14,16 +14,16 @@ public class PrivateRoomController : MonoBehaviour
 
     private void Awake()
     {
-        PrivateRoomEvents.OnRoomCreated += HandleRoomCreated;
-        PrivateRoomEvents.OnRoomJoined += HandleRoomJoined;
-        PrivateRoomEvents.OnRoomJoinFailed += HandleRoomJoinFailed;
+        RoomEvents.OnRoomCreated += HandleRoomCreated;
+        RoomEvents.OnRoomJoined += HandleRoomJoined;
+        RoomEvents.OnRoomJoinFailed += HandleRoomJoinFailed;
     }
 
     private void OnDestroy()
     {
-        PrivateRoomEvents.OnRoomCreated -= HandleRoomCreated;
-        PrivateRoomEvents.OnRoomJoined -= HandleRoomJoined;
-        PrivateRoomEvents.OnRoomJoinFailed -= HandleRoomJoinFailed;
+        RoomEvents.OnRoomCreated -= HandleRoomCreated;
+        RoomEvents.OnRoomJoined -= HandleRoomJoined;
+        RoomEvents.OnRoomJoinFailed -= HandleRoomJoinFailed;
     }
 
     public void OnClickCreateRoomBtn()

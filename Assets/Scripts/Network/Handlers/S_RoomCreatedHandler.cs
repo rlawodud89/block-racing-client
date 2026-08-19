@@ -10,6 +10,6 @@ public static class S_RoomCreatedHandler
         if (!packet.Success)
             return;
 
-        PrivateRoomEvents.RaiseRoomCreated(packet.RoomCode);
+        RoomEvents.RaiseRoomCreated(packet.RoomCode);
     }
 }
