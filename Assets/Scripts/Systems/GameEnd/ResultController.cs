@@ -10,9 +10,7 @@ public class ResultController : MonoBehaviour
     private TMP_Text resultText;
 
     [SerializeField]
-    private TMP_Text normalText;
-    [SerializeField]
-    private TMP_Text opponentDisconnectedText;
+    private TMP_Text descriptionText;
 
     [SerializeField]
     private Button rematchButton;
@@ -38,36 +36,47 @@ public class ResultController : MonoBehaviour
 
     private void Start()
     {
-        switch (ResultData.Result)
-        {
-            case GameResultType.Win:
-                resultText.text = "승리";
-                break;
+        resultText.text = GetResultText();
+        descriptionText.text = GetDescriptionText();
 
-            case GameResultType.Lose:
-                resultText.text = "패배";
-                break;
-
-            case GameResultType.Draw:
-                resultText.text = "무승부";
-                break;
-        }
-
-        switch (ResultData.Reason)
-        {
-            case GameEndReason.Normal:
-                normalText.gameObject.SetActive(true);
-                opponentDisconnectedText.gameObject.SetActive(false);
-                rematchButton.interactable = true;
-                break;
-
-            case GameEndReason.OpponentDisconnected:
-                normalText.gameObject.SetActive(false);
-                opponentDisconnectedText.gameObject.SetActive(true);
-                rematchButton.interactable = false;
-                break;
-        }
+        SetupRematch();
     }
+
+    private string GetResultText()
+    {
+        return ResultData.Result switch
+        {
+            GameResultType.Win => "승리",
+            GameResultType.Lose => "패배",
+            GameResultType.Draw => "무승부",
+            _ => string.Empty
+        };
+    }
+
+    private string GetDescriptionText()
+    {
+        if (ResultData.Reason == GameEndReason.OpponentDisconnected)
+        {
+            return "상대방이 게임을 나갔습니다.";
+        }
+
+        return ResultData.Result switch
+        {
+            GameResultType.Win => "먼저 결승선에 도착했습니다.",
+            GameResultType.Lose => "상대방이 먼저 도착했습니다.",
+            GameResultType.Draw => "동시에 도착했습니다.",
+            _ => string.Empty
+        };
+    }
+
+    private void SetupRematch()
+    {
+        bool canRematch =
+            ResultData.Reason == GameEndReason.Normal;
+
+        rematchButton.interactable = canRematch;
+    }
+
 
     public void OnClickRematchBtn()
     {
@@ -108,4 +117,5 @@ public class ResultController : MonoBehaviour
 
         SceneLoader.Instance.LoadScene("Game");
     }
+
 }
