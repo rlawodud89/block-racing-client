@@ -70,7 +70,7 @@ public class FlyingBlockView : MonoBehaviour
             cellRect.anchorMax = Vector2.zero;
             cellRect.pivot = Vector2.zero;
 
-            // Piece ³»ºÎ ÁÂÇ¥
+            // Piece ë‚´ë¶€ ì¢Œí‘œ
             cellRect.anchoredPosition =
                 new Vector2(
                     (shape[i].X - minX) * CellWidth,

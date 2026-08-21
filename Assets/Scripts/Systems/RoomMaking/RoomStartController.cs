@@ -16,7 +16,7 @@ public class RoomStartController : MonoBehaviour
 
     private void LoadGame()
     {
-        Debug.Log($"[MatchController] LoadGame È£Ãâ");
+        Debug.Log($"[MatchController] LoadGame í˜¸ì¶œ");
 
         SceneLoader.Instance.LoadScene("Game");
     }

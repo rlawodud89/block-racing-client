@@ -43,7 +43,7 @@ public class PlayerUI : MonoBehaviour
         PieceType? type,
         Rotation? rotation)
     {
-        // ÇöÀç ºí·ÏÀÌ ¾ø´Â »óÅÂ
+        // í˜„ì¬ ë¸”ë¡ì´ ì—†ëŠ” ìƒíƒœ
         if (!type.HasValue || !rotation.HasValue)
         {
             foreach (var cell in blockCells)
@@ -89,11 +89,11 @@ public class PlayerUI : MonoBehaviour
         {
             case block_racing_common.Game.Enums.PlayMode.Defense:
                 currentMode.color = Color.blue;
-                currentMode.text = "¼öºñ";
+                currentMode.text = "ìˆ˜ë¹„";
                 break;
             case block_racing_common.Game.Enums.PlayMode.Attack:
                 currentMode.color = Color.red;
-                currentMode.text = "°ø°İ";
+                currentMode.text = "ê³µê²©";
                 break;
             default:
                 currentMode.color = Color.black;
@@ -113,7 +113,7 @@ public class PlayerUI : MonoBehaviour
             return;
 
 
-        // ³²Àº ÄğÅ¸ÀÓ ºñÀ²
+        // ë‚¨ì€ ì¿¨íƒ€ì„ ë¹„ìœ¨
         cooldownImage.fillAmount =
             remaining / ShootCooldownTime;
     }

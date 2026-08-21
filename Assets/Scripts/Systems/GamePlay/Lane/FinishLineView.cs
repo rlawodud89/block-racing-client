@@ -5,7 +5,7 @@ public class FinishLineView : MonoBehaviour
     private const int LaneHeight = 20;
     private const float CellHeight = 55f;
 
-    // È­¸é ÇÏ³ª(Lane)¸¦ ÀÌµ¿ÇÏ´Â µ¥ ÇÊ¿äÇÑ °ÔÀÓ °Å¸®
+    // í™”ë©´ í•˜ë‚˜(Lane)ë¥¼ ì´ë™í•˜ëŠ” ë° í•„ìš”í•œ ê²Œì„ ê±°ë¦¬
     private const float DistancePerLane = 15f;
 
     private RectTransform _rect;
@@ -23,7 +23,7 @@ public class FinishLineView : MonoBehaviour
     {
         float remainingDistance = targetDistance - currentDistance;
 
-        // ¾ÆÁ÷ °á½Â¼±ÀÌ È­¸é¿¡ µé¾î¿ÀÁö ¾ÊÀ½
+        // ì•„ì§ ê²°ìŠ¹ì„ ì´ í™”ë©´ì— ë“¤ì–´ì˜¤ì§€ ì•ŠìŒ
         if (remainingDistance > DistancePerLane)
         {
             gameObject.SetActive(false);
@@ -31,7 +31,7 @@ public class FinishLineView : MonoBehaviour
         }
 
 
-        // °á½Â¼±¿¡ µµÂø ÀÌÈÄ
+        // ê²°ìŠ¹ì„ ì— ë„ì°© ì´í›„
         if (remainingDistance < 0f)
         {
             gameObject.SetActive(false);
@@ -40,12 +40,12 @@ public class FinishLineView : MonoBehaviour
 
         gameObject.SetActive(true);
 
-        // 0 ¡æ 1
-        // °á½Â¼±ÀÌ È­¸é À§ÂÊ¿¡¼­ ¾Æ·¡ÂÊÀ¸·Î ³»·Á¿À´Â ÁøÇàµµ
+        // 0 â†’ 1
+        // ê²°ìŠ¹ì„ ì´ í™”ë©´ ìœ„ìª½ì—ì„œ ì•„ë˜ìª½ìœ¼ë¡œ ë‚´ë ¤ì˜¤ëŠ” ì§„í–‰ë„
         float progress = 1f - (remainingDistance / DistancePerLane);
 
 
-        // Lane À§ÂÊ ¡æ Car À§Ä¡
+        // Lane ìœ„ìª½ â†’ Car ìœ„ì¹˜
         float startY = (LaneHeight - 1) * CellHeight;
 
         float endY = 0f;
