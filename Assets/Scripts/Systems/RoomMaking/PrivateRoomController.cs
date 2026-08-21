@@ -75,7 +75,7 @@ public class PrivateRoomController : MonoBehaviour
     private void HandleRoomCreated(string roomCode)
     {
         createRoomPanel.SetActive(true);
-        roomCodeText.text = $"¹æ ÀÔÀå ÄÚµå\n{roomCode}";
+        roomCodeText.text = $"ë°© ì…ì¥ ì½”ë“œ\n{roomCode}";
     }
 
     private void HandleRoomJoined(int roomId)
@@ -89,13 +89,13 @@ public class PrivateRoomController : MonoBehaviour
     {
         Debug.Log("Room Create Failed.");
 
-        WarningUI.Instance?.Show("¹æ »ı¼º¿¡ ½ÇÆĞÇß½À´Ï´Ù.");
+        WarningUI.Instance?.Show("ë°© ìƒì„±ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.");
     }
 
     private void HandleRoomJoinFailed()
     {
         Debug.Log("Room Join Failed.");
 
-        WarningUI.Instance?.Show("µé¾î°¥ ¼ö ¾ø´Â ¹æÀÔ´Ï´Ù.");
+        WarningUI.Instance?.Show("ë“¤ì–´ê°ˆ ìˆ˜ ì—†ëŠ” ë°©ì…ë‹ˆë‹¤.");
     }
 }

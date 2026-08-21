@@ -29,7 +29,7 @@ public class LaneView : MonoBehaviour
     [ContextMenu("Generate Grid")]
     private void GenerateGrid()
     {
-        // ±âÁ¸ Block Á¦°Å
+        // ê¸°ì¡´ Block ì œê±°
         ClearGrid();
 
         for (int y = 0; y < Height; y++)
@@ -115,7 +115,7 @@ public class LaneView : MonoBehaviour
         var flyingSnapshots = snapshot.FlyingBlocks;
 
 
-        // ÇÊ¿äÇÑ ¸¸Å­ »ý¼º
+        // í•„ìš”í•œ ë§Œí¼ ìƒì„±
         while (_flyingBlocks.Count < flyingSnapshots.Count)
         {
             FlyingBlockView view =
@@ -127,7 +127,7 @@ public class LaneView : MonoBehaviour
         }
 
 
-        // È°¼º FlyingBlock ¾÷µ¥ÀÌÆ®
+        // í™œì„± FlyingBlock ì—…ë°ì´íŠ¸
         for (int i = 0; i < flyingSnapshots.Count; i++)
         {
             FlyingBlockView view =
@@ -140,7 +140,7 @@ public class LaneView : MonoBehaviour
         }
 
 
-        // ³²´Â View ºñÈ°¼ºÈ­
+        // ë‚¨ëŠ” View ë¹„í™œì„±í™”
         for (int i = flyingSnapshots.Count;
              i < _flyingBlocks.Count;
              i++)

@@ -52,7 +52,7 @@ public class MatchController : MonoBehaviour
 
         MatchingTime.SetActive(true);
 
-        MatchButtonText.text = "¸ÅÄª Áß...";
+        MatchButtonText.text = "ë§¤ì¹­ ì¤‘...";
 
         matchCoroutine = StartCoroutine(MatchTimer());
     }
@@ -103,6 +103,6 @@ public class MatchController : MonoBehaviour
             matchCoroutine = null;
         }
 
-        MatchButtonText.text = "¸ÅÄª ½ÃÀÛ";
+        MatchButtonText.text = "ë§¤ì¹­ ì‹œìž‘";
     }
 }
