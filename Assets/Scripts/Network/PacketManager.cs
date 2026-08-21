@@ -19,6 +19,7 @@ public class PacketManager
         Register<S_GameCanceledPacket>(PacketId.S_GameCanceled, S_GameCanceledHandler.Handle);
         Register<S_RoomCreatedPacket>(PacketId.S_RoomCreated, S_RoomCreatedHandler.Handle);
         Register<S_RoomJoinedPacket>(PacketId.S_RoomJoined, S_RoomJoinedHandler.Handle);
+        Register<S_OpponentExitPacket>(PacketId.S_OpponentExit, S_OpponentExitHandler.Handle);
     }
 
     public void Register<T>(
