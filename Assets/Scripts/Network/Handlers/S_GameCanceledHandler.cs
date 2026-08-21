@@ -7,6 +7,6 @@ public static class S_GameCanceledHandler
 {
     public static void Handle(S_GameCanceledPacket packet)
     {
-        RoomEvents.RaiseRoomReady();
+        RoomEvents.RaiseGameCanceled();
     }
 }
