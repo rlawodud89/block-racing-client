@@ -37,7 +37,7 @@ public class PrivateRoomController : MonoBehaviour
 
     public void OnClickCreateRoomExitBtn()
     {
-        var packet = new C_LeaveRoomPacket();
+        var packet = new C_CloseRoomPacket();
 
         _ = NetworkManager.Instance.SendAsync(packet);
 
