@@ -1,3 +1,4 @@
+using block_racing_common.Game.Enums;
 using block_racing_common.Network.Packets;
 using TMPro;
 using UnityEngine;
@@ -37,7 +38,7 @@ public class PrivateRoomController : MonoBehaviour
 
     public void OnClickCreateRoomExitBtn()
     {
-        var packet = new C_LeaveRoomPacket();
+        var packet = new C_CloseRoomPacket();
 
         _ = NetworkManager.Instance.SendAsync(packet);
 
@@ -85,17 +86,55 @@ public class PrivateRoomController : MonoBehaviour
         joinRoomPanel.SetActive(false);
     }
 
-    private void HandleRoomCreateFailed()
+    private void HandleRoomCreateFailed(RoomCreateResult result)
     {
-        Debug.Log("Room Create Failed.");
+        Debug.Log($"Room Create Failed. Result={result}");
 
-        WarningUI.Instance?.Show("방 생성에 실패했습니다.");
+        switch (result)
+        {
+            case RoomCreateResult.AlreadyInRoom:
+                WarningUI.Instance?.Show("이미 방에 참가하고 있습니다.");
+                break;
+
+            case RoomCreateResult.AlreadyQueued:
+                WarningUI.Instance?.Show("이미 매칭 대기 중입니다.");
+                break;
+
+            case RoomCreateResult.RoomLimitExceeded:
+                WarningUI.Instance?.Show("더 이상 방을 생성할 수 없습니다.");
+                break;
+
+            default:
+                WarningUI.Instance?.Show("방 생성에 실패했습니다.");
+                break;
+        }
     }
 
-    private void HandleRoomJoinFailed()
+    private void HandleRoomJoinFailed(RoomJoinResult result)
     {
-        Debug.Log("Room Join Failed.");
+        Debug.Log($"Room Join Failed. Result={result}");
 
-        WarningUI.Instance?.Show("들어갈 수 없는 방입니다.");
+        switch (result)
+        {
+            case RoomJoinResult.AlreadyInRoom:
+                WarningUI.Instance?.Show("이미 방에 참가하고 있습니다.");
+                break;
+
+            case RoomJoinResult.AlreadyQueued:
+                WarningUI.Instance?.Show("이미 매칭 대기 중입니다.");
+                break;
+
+            case RoomJoinResult.RoomNotFound:
+                WarningUI.Instance?.Show("존재하지 않는 방입니다.");
+                break;
+
+            case RoomJoinResult.RoomFull:
+                WarningUI.Instance?.Show("이미 방이 가득 찼습니다.");
+                break;
+
+            default:
+                WarningUI.Instance?.Show("방 입장에 실패했습니다.");
+                break;
+        }
     }
 }

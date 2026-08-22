@@ -1,14 +1,16 @@
+using block_racing_common.Game.Enums;
 using System;
 
 public static class RoomEvents
 {
-    // Private Room »ı¼º / ÀÔÀå
+    // Private Room ìƒì„± / ì…ì¥
     public static event Action<string> OnRoomCreated;
     public static event Action<int> OnRoomJoined;
-    public static event Action OnRoomCreateFailed;
-    public static event Action OnRoomJoinFailed;
 
-    // Room »óÅÂ
+    public static event Action<RoomCreateResult> OnRoomCreateFailed;
+    public static event Action<RoomJoinResult> OnRoomJoinFailed;
+
+    // Room ìƒíƒœ
     public static event Action OnRoomReady;
     public static event Action OnGameCanceled;
 
@@ -23,14 +25,14 @@ public static class RoomEvents
         OnRoomJoined?.Invoke(roomId);
     }
 
-    public static void RaiseRoomCreateFailed()
+    public static void RaiseRoomCreateFailed(RoomCreateResult result)
     {
-        OnRoomCreateFailed?.Invoke();
+        OnRoomCreateFailed?.Invoke(result);
     }
 
-    public static void RaiseRoomJoinFailed()
+    public static void RaiseRoomJoinFailed(RoomJoinResult result)
     {
-        OnRoomJoinFailed?.Invoke();
+        OnRoomJoinFailed?.Invoke(result);
     }
 
     public static void RaiseRoomReady()
