@@ -50,6 +50,7 @@ public class ClientSession
     private async Task ReceiveLoopAsync()
     {
         byte[] tempBuffer = new byte[1024];
+        bool unexpectedDisconnect = false;
 
         try
         {
@@ -62,7 +63,14 @@ public class ClientSession
                 );
 
                 if (read == 0)
+                {
+                    if (_isConnected)
+                    {
+                        unexpectedDisconnect = true;
+                    }
+
                     break;
+                }
 
                 _receiveBuffer.Append(tempBuffer, read);
 
@@ -72,17 +80,29 @@ public class ClientSession
                 }
             }
         }
-        catch (ObjectDisposedException)
-        {
-            // Disconnect()¿¡ ÀÇÇØ StreamÀÌ ´İÈù °æ¿ì
-        }
         catch (Exception ex)
         {
-            Debug.LogException(ex);
+            // ë‚´ê°€ Disconnect()ë¥¼ í˜¸ì¶œí•œ ê²ƒì´ ì•„ë‹ˆë¼ë©´
+            // ì˜ˆìƒì¹˜ ëª»í•œ ì—°ê²° ì¢…ë£Œ
+            if (_isConnected)
+            {
+                unexpectedDisconnect = true;
+
+                Debug.Log(ex);
+            }
         }
         finally
         {
+            Debug.Log("ReceiveLoop finally");
+
             Disconnect();
+
+            if (unexpectedDisconnect)
+            {
+                Debug.Log("RaiseDisconnected");
+
+                NetworkEvents.RaiseDisconnected();
+            }
         }
     }
 
