@@ -1,3 +1,4 @@
+using block_racing_common.Game.Enums;
 using block_racing_common.Network.Packets;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,9 +8,9 @@ public static class S_RoomCreatedHandler
 {
     public static void Handle(S_RoomCreatedPacket packet)
     {
-        if (!packet.Success)
+        if (packet.Result != RoomCreateResult.Success)
         {
-            RoomEvents.RaiseRoomCreateFailed();
+            RoomEvents.RaiseRoomCreateFailed(packet.Result);
             return;
         }
 

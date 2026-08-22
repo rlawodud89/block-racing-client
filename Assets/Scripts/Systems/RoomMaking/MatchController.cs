@@ -9,6 +9,8 @@ public class MatchController : MonoBehaviour
     [SerializeField] private GameObject MatchingTime;
     [SerializeField] private TMP_Text MatchingTimeText;
 
+    [SerializeField] private GameObject PrivateRoomPanel;
+
     private bool isMatching = false;
     private Coroutine matchCoroutine;
 
@@ -55,6 +57,8 @@ public class MatchController : MonoBehaviour
         MatchButtonText.text = "매칭 중...";
 
         matchCoroutine = StartCoroutine(MatchTimer());
+
+        PrivateRoomPanel.SetActive(false);
     }
 
     private void CancelMatch()
@@ -72,6 +76,8 @@ public class MatchController : MonoBehaviour
         {
             StopCoroutine(matchCoroutine);
         }
+
+        PrivateRoomPanel.SetActive(true);
     }
 
     private IEnumerator MatchTimer()
