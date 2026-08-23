@@ -1,4 +1,5 @@
 using block_racing_common.Network;
+using block_racing_common.Network.Packets;
 using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ public class ClientSession
     private readonly PacketManager _packetManager;
 
     private bool _isConnected;
+    private bool _disconnectRaised;
 
     public bool IsConnected => _isConnected;
 
@@ -21,6 +23,7 @@ public class ClientSession
         _packetManager = packetManager;
     }
 
+
     public async Task ConnectAsync(string ip, int port)
     {
         _client = new TcpClient();
@@ -28,7 +31,9 @@ public class ClientSession
         await _client.ConnectAsync(ip, port);
 
         _stream = _client.GetStream();
+
         _isConnected = true;
+        _disconnectRaised = false;
 
         _ = ReceiveLoopAsync();
     }
@@ -62,7 +67,14 @@ public class ClientSession
                 );
 
                 if (read == 0)
+                {
+                    if (_isConnected)
+                    {
+                        HandleUnexpectedDisconnect();
+                    }
+
                     break;
+                }
 
                 _receiveBuffer.Append(tempBuffer, read);
 
@@ -72,13 +84,14 @@ public class ClientSession
                 }
             }
         }
-        catch (ObjectDisposedException)
-        {
-            // Disconnect()¿¡ ÀÇÇØ StreamÀÌ ´ÝÈù °æ¿ì
-        }
         catch (Exception ex)
         {
-            Debug.LogException(ex);
+            if (_isConnected)
+            {
+                Debug.Log(ex);
+
+                HandleUnexpectedDisconnect();
+            }
         }
         finally
         {
@@ -112,5 +125,24 @@ public class ClientSession
 
         _client?.Close();
         _client = null;
+    }
+
+    private void RaiseDisconnected()
+    {
+        Debug.Log("RaiseDisconnected");
+
+        if (_disconnectRaised)
+            return;
+
+        _disconnectRaised = true;
+
+        NetworkEvents.RaiseDisconnected();
+    }
+
+
+    private void HandleUnexpectedDisconnect()
+    {
+        Disconnect();
+        RaiseDisconnected();
     }
 }
