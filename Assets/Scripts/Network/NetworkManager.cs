@@ -1,6 +1,7 @@
 using block_racing_common.Network;
 using block_racing_common.Network.Packets;
 using System;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -43,6 +44,8 @@ public class NetworkManager : MonoBehaviour
 
     private void CreateSession()
     {
+        Debug.Log("CreateSession");
+
         _session = new ClientSession(_packetManager);
     }
 
@@ -64,31 +67,41 @@ public class NetworkManager : MonoBehaviour
 
         _isConnecting = true;
 
-        while (_isRunning)
+        try
         {
-            try
+            while (_isRunning)
             {
-                CreateSession();
+                try
+                {
+                    CreateSession();
 
-                await _session.ConnectAsync("13.125.25.95", 7777);
+                    await _session.ConnectAsync("127.0.0.1", 7777);
 
-                Debug.Log("서버 연결 성공");
+                    Debug.Log("서버 연결 성공");
 
-                WarningUI.Instance.Show("서버에 연결되었습니다.");
+                    WarningUI.Instance.Show("서버에 연결되었습니다.");
 
-                NetworkEvents.RaiseConnected();
+                    NetworkEvents.RaiseConnected();
 
-                break;
-            }
-            catch (Exception ex)
-            {
-                Debug.Log($"서버 연결 실패: {ex.Message}");
+                    break;
+                }
+                catch (SocketException ex)
+                {
+                    Debug.Log($"서버 연결 실패: {ex.Message}");
 
-                await Task.Delay(2000);
+                    await Task.Delay(2000);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning(ex);
+                    break;
+                }
             }
         }
-
-        _isConnecting = false;
+        finally
+        {
+            _isConnecting = false;
+        }
     }
 
     public Task SendAsync(IPacket packet)

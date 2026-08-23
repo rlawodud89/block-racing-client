@@ -22,8 +22,8 @@ public class LoginController : MonoBehaviour
     {
         LoginEvents.OnLoginSuccess -= LoadLobby;
 
-        NetworkEvents.OnConnected += EnableLoginButton;
-        NetworkEvents.OnDisconnected += DisableLoginButton;
+        NetworkEvents.OnConnected -= EnableLoginButton;
+        NetworkEvents.OnDisconnected -= DisableLoginButton;
     }
 
     private void EnableLoginButton()
