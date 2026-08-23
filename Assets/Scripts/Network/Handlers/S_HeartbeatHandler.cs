@@ -9,6 +9,6 @@ public static class S_HeartbeatHandler
     {
         Debug.Log("S_Heartbeat 수신");
 
-        _ = NetworkManager.Instance.SendAsync(new C_HeartbeatPacket());
+        NetworkManager.Instance.UpdateHeartbeat();
     }
 }
