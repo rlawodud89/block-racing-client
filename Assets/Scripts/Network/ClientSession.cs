@@ -16,11 +16,6 @@ public class ClientSession
     private bool _isConnected;
     private bool _disconnectRaised;
 
-    private DateTime _lastHeartbeatTime;
-
-    private const int HeartbeatInterval = 1000;
-    private const int HeartbeatTimeout = 5000;
-
     public bool IsConnected => _isConnected;
 
     public ClientSession(PacketManager packetManager)
@@ -40,10 +35,7 @@ public class ClientSession
         _isConnected = true;
         _disconnectRaised = false;
 
-        _lastHeartbeatTime = DateTime.UtcNow;
-
         _ = ReceiveLoopAsync();
-        _ = HeartbeatLoopAsync();
     }
 
     public async Task SendAsync(IPacket packet)
@@ -118,47 +110,7 @@ public class ClientSession
 
         PacketId id = (PacketId)packetId;
 
-        if (id == PacketId.S_Heartbeat)
-        {
-            _lastHeartbeatTime = DateTime.UtcNow;
-            return;
-        }
-
         _packetManager.Process(id, reader);
-    }
-
-    private async Task HeartbeatLoopAsync()
-    {
-        while (_isConnected)
-        {
-            try
-            {
-                await SendAsync(new C_HeartbeatPacket());
-
-                await Task.Delay(HeartbeatInterval);
-
-                if (DateTime.UtcNow - _lastHeartbeatTime
-                    > TimeSpan.FromMilliseconds(HeartbeatTimeout))
-                {
-                    Debug.Log("Heartbeat Timeout");
-
-                    HandleUnexpectedDisconnect();
-
-                    break;
-                }
-            }
-            catch (Exception ex)
-            {
-                if (_isConnected)
-                {
-                    Debug.Log($"Heartbeat 실패: {ex.Message}");
-
-                    HandleUnexpectedDisconnect();
-                }
-
-                break;
-            }
-        }
     }
 
     public void Disconnect()

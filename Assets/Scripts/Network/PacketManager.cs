@@ -20,6 +20,7 @@ public class PacketManager
         Register<S_RoomCreatedPacket>(PacketId.S_RoomCreated, S_RoomCreatedHandler.Handle);
         Register<S_RoomJoinedPacket>(PacketId.S_RoomJoined, S_RoomJoinedHandler.Handle);
         Register<S_OpponentExitPacket>(PacketId.S_OpponentExit, S_OpponentExitHandler.Handle);
+        Register<S_HeartbeatPacket>(PacketId.S_Heartbeat, S_HeartbeatHandler.Handle);
     }
 
     public void Register<T>(
