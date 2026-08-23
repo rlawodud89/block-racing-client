@@ -70,7 +70,7 @@ public class NetworkManager : MonoBehaviour
             {
                 CreateSession();
 
-                await _session.ConnectAsync("127.0.0.1", 7777);
+                await _session.ConnectAsync("13.125.25.95", 7777);
 
                 Debug.Log("서버 연결 성공");
 

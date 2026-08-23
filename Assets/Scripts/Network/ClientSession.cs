@@ -1,4 +1,5 @@
 using block_racing_common.Network;
+using block_racing_common.Network.Packets;
 using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -13,6 +14,12 @@ public class ClientSession
     private readonly PacketManager _packetManager;
 
     private bool _isConnected;
+    private bool _disconnectRaised;
+
+    private DateTime _lastHeartbeatTime;
+
+    private const int HeartbeatInterval = 1000;
+    private const int HeartbeatTimeout = 5000;
 
     public bool IsConnected => _isConnected;
 
@@ -21,6 +28,7 @@ public class ClientSession
         _packetManager = packetManager;
     }
 
+
     public async Task ConnectAsync(string ip, int port)
     {
         _client = new TcpClient();
@@ -28,9 +36,14 @@ public class ClientSession
         await _client.ConnectAsync(ip, port);
 
         _stream = _client.GetStream();
+
         _isConnected = true;
+        _disconnectRaised = false;
+
+        _lastHeartbeatTime = DateTime.UtcNow;
 
         _ = ReceiveLoopAsync();
+        _ = HeartbeatLoopAsync();
     }
 
     public async Task SendAsync(IPacket packet)
@@ -50,7 +63,6 @@ public class ClientSession
     private async Task ReceiveLoopAsync()
     {
         byte[] tempBuffer = new byte[1024];
-        bool unexpectedDisconnect = false;
 
         try
         {
@@ -66,7 +78,7 @@ public class ClientSession
                 {
                     if (_isConnected)
                     {
-                        unexpectedDisconnect = true;
+                        HandleUnexpectedDisconnect();
                     }
 
                     break;
@@ -82,27 +94,16 @@ public class ClientSession
         }
         catch (Exception ex)
         {
-            // 내가 Disconnect()를 호출한 것이 아니라면
-            // 예상치 못한 연결 종료
             if (_isConnected)
             {
-                unexpectedDisconnect = true;
-
                 Debug.Log(ex);
+
+                HandleUnexpectedDisconnect();
             }
         }
         finally
         {
-            Debug.Log("ReceiveLoop finally");
-
             Disconnect();
-
-            if (unexpectedDisconnect)
-            {
-                Debug.Log("RaiseDisconnected");
-
-                NetworkEvents.RaiseDisconnected();
-            }
         }
     }
 
@@ -117,7 +118,47 @@ public class ClientSession
 
         PacketId id = (PacketId)packetId;
 
+        if (id == PacketId.S_Heartbeat)
+        {
+            _lastHeartbeatTime = DateTime.UtcNow;
+            return;
+        }
+
         _packetManager.Process(id, reader);
+    }
+
+    private async Task HeartbeatLoopAsync()
+    {
+        while (_isConnected)
+        {
+            try
+            {
+                await SendAsync(new C_HeartbeatPacket());
+
+                await Task.Delay(HeartbeatInterval);
+
+                if (DateTime.UtcNow - _lastHeartbeatTime
+                    > TimeSpan.FromMilliseconds(HeartbeatTimeout))
+                {
+                    Debug.Log("Heartbeat Timeout");
+
+                    HandleUnexpectedDisconnect();
+
+                    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (_isConnected)
+                {
+                    Debug.Log($"Heartbeat 실패: {ex.Message}");
+
+                    HandleUnexpectedDisconnect();
+                }
+
+                break;
+            }
+        }
     }
 
     public void Disconnect()
@@ -132,5 +173,24 @@ public class ClientSession
 
         _client?.Close();
         _client = null;
+    }
+
+    private void RaiseDisconnected()
+    {
+        Debug.Log("RaiseDisconnected");
+
+        if (_disconnectRaised)
+            return;
+
+        _disconnectRaised = true;
+
+        NetworkEvents.RaiseDisconnected();
+    }
+
+
+    private void HandleUnexpectedDisconnect()
+    {
+        Disconnect();
+        RaiseDisconnected();
     }
 }
