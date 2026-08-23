@@ -109,6 +109,11 @@ public class NetworkManager : MonoBehaviour
         return _session.SendAsync(packet);
     }
 
+    public void UpdateHeartbeat()
+    {
+        _session?.UpdateHeartbeat();
+    }
+
     public void Shutdown()
     {
         Destroy(gameObject);
