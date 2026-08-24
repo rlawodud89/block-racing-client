@@ -39,6 +39,8 @@ public class ResultController : MonoBehaviour
         resultText.text = GetResultText();
         descriptionText.text = GetDescriptionText();
 
+        PlayResultSound();
+
         SetupRematch();
     }
 
@@ -46,9 +48,9 @@ public class ResultController : MonoBehaviour
     {
         return ResultData.Result switch
         {
-            GameResultType.Win => "½Â¸®",
-            GameResultType.Lose => "ÆÐ¹è",
-            GameResultType.Draw => "¹«½ÂºÎ",
+            GameResultType.Win => "ìŠ¹ë¦¬",
+            GameResultType.Lose => "íŒ¨ë°°",
+            GameResultType.Draw => "ë¬´ìŠ¹ë¶€",
             _ => string.Empty
         };
     }
@@ -57,16 +59,34 @@ public class ResultController : MonoBehaviour
     {
         if (ResultData.Reason == GameEndReason.OpponentDisconnected)
         {
-            return "»ó´ë¹æÀÌ °ÔÀÓÀ» ³ª°¬½À´Ï´Ù.";
+            return "ìƒëŒ€ë°©ì´ ê²Œìž„ì„ ë‚˜ê°”ìŠµë‹ˆë‹¤.";
         }
 
         return ResultData.Result switch
         {
-            GameResultType.Win => "¸ÕÀú °á½Â¼±¿¡ µµÂøÇß½À´Ï´Ù.",
-            GameResultType.Lose => "»ó´ë¹æÀÌ ¸ÕÀú µµÂøÇß½À´Ï´Ù.",
-            GameResultType.Draw => "µ¿½Ã¿¡ µµÂøÇß½À´Ï´Ù.",
+            GameResultType.Win => "ë¨¼ì € ê²°ìŠ¹ì„ ì— ë„ì°©í–ˆìŠµë‹ˆë‹¤.",
+            GameResultType.Lose => "ìƒëŒ€ë°©ì´ ë¨¼ì € ë„ì°©í–ˆìŠµë‹ˆë‹¤.",
+            GameResultType.Draw => "ë™ì‹œì— ë„ì°©í–ˆìŠµë‹ˆë‹¤.",
             _ => string.Empty
         };
+    }
+
+    private void PlayResultSound()
+    {
+        switch (ResultData.Result)
+        {
+            case GameResultType.Win:
+                AudioManager.Instance.PlayWin();
+                break;
+
+            case GameResultType.Lose:
+                AudioManager.Instance.PlayLose();
+                break;
+
+            case GameResultType.Draw:
+                AudioManager.Instance.PlayLose();
+                break;
+        }
     }
 
     private void SetupRematch()
