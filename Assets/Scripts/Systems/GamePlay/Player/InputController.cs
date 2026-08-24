@@ -5,6 +5,7 @@ using UnityEngine;
 public class InputController : MonoBehaviour
 {
     private bool _canInput = false;
+    private float _shootCooldownRemaining = 0f;
 
     private void Awake()
     {
@@ -19,7 +20,11 @@ public class InputController : MonoBehaviour
     private void EnableInput()
     {
         _canInput = true;
-        Debug.Log("Input Enabled");
+    }
+
+    public void UpdateShootCooldown(float cooldownRemaining)
+    {
+        _shootCooldownRemaining = cooldownRemaining;
     }
 
     private void Update()
@@ -39,7 +44,7 @@ public class InputController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SendInput(InputType.Shoot);
+            TryShoot();
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -51,6 +56,16 @@ public class InputController : MonoBehaviour
         {
             SendInput(InputType.ChangeMode);
         }
+    }
+
+    private void TryShoot()
+    {
+        if (_shootCooldownRemaining > 0f)
+            return;
+
+        AudioManager.Instance.PlayShoot();
+
+        SendInput(InputType.Shoot);
     }
 
     private void SendInput(InputType type)

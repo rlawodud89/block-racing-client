@@ -25,6 +25,8 @@ public class CountdownUI : MonoBehaviour
 
         countdownText.text = "GO!";
 
+        AudioManager.Instance.PlayGameStart();
+
         yield return new WaitForSeconds(0.5f);
 
         countdownText.gameObject.SetActive(false);

@@ -17,6 +17,8 @@ public class GameSceneManager : MonoBehaviour
     {
         try
         {
+            AudioManager.Instance.PlayGameSceneEnter();
+
             await NetworkManager.Instance.SendAsync(new C_ReadyPacket());
 
             Debug.Log("Game Ready Sent");
