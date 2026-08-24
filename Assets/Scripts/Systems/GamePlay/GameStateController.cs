@@ -17,6 +17,8 @@ public class GameStateController : MonoBehaviour
 
     [SerializeField] private PlayerUI myPlayerUI;
 
+    [SerializeField] private InputController inputController;
+
     private long _lastTick = -1;
     private bool _isGameEnded = false;
 
@@ -43,7 +45,7 @@ public class GameStateController : MonoBehaviour
         if (_isGameEnded)
             return;
 
-        // ¿À·¡µÈ ½º³À¼¦Àº ¹«½Ã
+        // ì˜¤ë˜ëœ ìŠ¤ëƒ…ìƒ·ì€ ë¬´ì‹œ
         if (snapshot.Tick <= _lastTick)
             return;
 
@@ -74,21 +76,25 @@ public class GameStateController : MonoBehaviour
             return;
         }
 
-        // ³» LaneÀº Ç×»ó ¿ŞÂÊ
+        // ë‚´ Laneì€ í•­ìƒ ì™¼ìª½
         myLaneView.UpdateLane(mySnapshot.Lane, mySnapshot.Speed);
 
-        // »ó´ë LaneÀº Ç×»ó ¿À¸¥ÂÊ
+        // ìƒëŒ€ Laneì€ í•­ìƒ ì˜¤ë¥¸ìª½
         opponentLaneView.UpdateLane(opponentSnapshot.Lane, opponentSnapshot.Speed);
 
-        // Â÷ À§Ä¡
+        // ì°¨ ìœ„ì¹˜
         myCarView.UpdateCar(mySnapshot.CarX, mySnapshot.IsStunned);
         opponentCarView.UpdateCar(opponentSnapshot.CarX, opponentSnapshot.IsStunned);
 
-        // °á½Â¼± À§Ä¡
+        // ê²°ìŠ¹ì„  ìœ„ì¹˜
         myFinishLineView.UpdateFinishLine(mySnapshot.Distance, snapshot.TargetDistance);
         opponentFinishLineView.UpdateFinishLine(opponentSnapshot.Distance, snapshot.TargetDistance);
 
-        //// ³» ¸ğµå UI
+        //// ë‚´ ëª¨ë“œ UI
         myPlayerUI.UpdateUI(mySnapshot);
+
+        // ì…ë ¥ ì œì–´ìš© ì¿¨íƒ€ì„ ìƒíƒœ ì „ë‹¬
+        inputController.UpdateShootCooldown(
+            mySnapshot.ShootCooldownRemaining);
     }
 }
