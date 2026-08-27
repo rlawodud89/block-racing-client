@@ -46,17 +46,24 @@ public class GameStateController : MonoBehaviour
         if (_isGameEnded)
             return;
 
-        // 오래된 스냅샷은 무시
         if (snapshot.Tick <= _lastTick)
             return;
 
-
         _lastTick = snapshot.Tick;
 
-        // 서버 Tick 기준 게임 시작 시퀀스 진행
+        // 1. Tick 기반 시작 시퀀스 처리
         gameStartSequenceController.ApplyTick(snapshot.Tick);
 
+        // 2. 게임 시작 전에는 게임 상태 렌더링하지 않음
+        if (!gameStartSequenceController.IsGameStarted)
+            return;
 
+        // 3. 게임 상태 적용
+        ApplyGameState(snapshot);
+    }
+
+    public void ApplyGameState(GameStateSnapshot snapshot)
+    {
         int myId = ClientContext.PlayerId;
 
         PlayerSnapshot mySnapshot = null;
