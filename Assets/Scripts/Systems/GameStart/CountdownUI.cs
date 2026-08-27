@@ -6,29 +6,38 @@ public class CountdownUI : MonoBehaviour
 {
     [SerializeField] private TMP_Text countdownText;
 
-    public IEnumerator StartCountdown(float seconds)
+    private const int TickPerSecond = 20;
+
+    private long _startTick;
+
+    public void StartCountdown(long startTick)
     {
+        _startTick = startTick;
+
         countdownText.gameObject.SetActive(true);
+    }
 
-        float remainTime = seconds;
+    public void UpdateCountdown(long currentTick)
+    {
+        long remainTicks = _startTick - currentTick;
 
-        while (remainTime > 0)
+        if (remainTicks > 0)
         {
-            int displayNumber = Mathf.CeilToInt(remainTime);
+            int remainSeconds =
+                Mathf.CeilToInt(
+                    remainTicks / (float)TickPerSecond
+                );
 
-            countdownText.text = displayNumber.ToString();
+            countdownText.text = remainSeconds.ToString();
 
-            remainTime -= Time.deltaTime;
-
-            yield return null;
+            return;
         }
 
         countdownText.text = "GO!";
+    }
 
-        AudioManager.Instance.PlayGameStart();
-
-        yield return new WaitForSeconds(0.5f);
-
+    public void Hide()
+    {
         countdownText.gameObject.SetActive(false);
     }
 }

@@ -12,6 +12,9 @@ public class GameStartSequenceController : MonoBehaviour
 
     [SerializeField] private CountdownUI countdownUI;
 
+    private long _startTick;
+    private bool _isGameStarted;
+
     private void Awake()
     {
         if (Instance != null)
@@ -40,16 +43,37 @@ public class GameStartSequenceController : MonoBehaviour
 
     private void StartGame(S_StartGamePacket packet)
     {
-        StartCoroutine(
-            StartRoutine(packet.CountdownSeconds)
-        );
+        _startTick = packet.StartTick;
+        _isGameStarted = false;
+
+        countdownUI.StartCountdown(_startTick);
     }
 
-
-    private IEnumerator StartRoutine(float seconds)
+    public void ApplyTick(long currentTick)
     {
-        yield return countdownUI.StartCountdown(seconds);
+        if (_isGameStarted)
+            return;
+
+
+        countdownUI.UpdateCountdown(currentTick);
+
+        if (currentTick < _startTick)
+            return;
+
+
+        _isGameStarted = true;
+
+        AudioManager.Instance.PlayGameStart();
 
         OnGameStarted?.Invoke();
+
+        StartCoroutine(HideCountdownRoutine());
+    }
+
+    private IEnumerator HideCountdownRoutine()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        countdownUI.Hide();
     }
 }
