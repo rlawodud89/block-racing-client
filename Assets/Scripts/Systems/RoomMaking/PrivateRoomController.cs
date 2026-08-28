@@ -79,7 +79,7 @@ public class PrivateRoomController : MonoBehaviour
         roomCodeText.text = $"방 입장 코드\n{roomCode}";
     }
 
-    private void HandleRoomJoined(int roomId)
+    private void HandleRoomJoined(long roomId)
     {
         Debug.Log($"Room Joined. RoomId={roomId}");
 

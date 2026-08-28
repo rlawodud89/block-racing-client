@@ -64,7 +64,7 @@ public class GameStateController : MonoBehaviour
 
     public void ApplyGameState(GameStateSnapshot snapshot)
     {
-        int myId = ClientContext.PlayerId;
+        long myId = ClientContext.PlayerId;
 
         PlayerSnapshot mySnapshot = null;
         PlayerSnapshot opponentSnapshot = null;
