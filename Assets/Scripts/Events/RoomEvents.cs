@@ -5,7 +5,7 @@ public static class RoomEvents
 {
     // Private Room 생성 / 입장
     public static event Action<string> OnRoomCreated;
-    public static event Action<int> OnRoomJoined;
+    public static event Action<long> OnRoomJoined;
 
     public static event Action<RoomCreateResult> OnRoomCreateFailed;
     public static event Action<RoomJoinResult> OnRoomJoinFailed;
@@ -20,7 +20,7 @@ public static class RoomEvents
         OnRoomCreated?.Invoke(roomCode);
     }
 
-    public static void RaiseRoomJoined(int roomId)
+    public static void RaiseRoomJoined(long roomId)
     {
         OnRoomJoined?.Invoke(roomId);
     }

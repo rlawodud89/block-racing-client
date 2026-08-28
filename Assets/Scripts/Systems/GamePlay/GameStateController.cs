@@ -18,6 +18,7 @@ public class GameStateController : MonoBehaviour
     [SerializeField] private PlayerUI myPlayerUI;
 
     [SerializeField] private InputController inputController;
+    [SerializeField] private GameStartSequenceController gameStartSequenceController;
 
     private long _lastTick = -1;
     private bool _isGameEnded = false;
@@ -45,13 +46,25 @@ public class GameStateController : MonoBehaviour
         if (_isGameEnded)
             return;
 
-        // 오래된 스냅샷은 무시
         if (snapshot.Tick <= _lastTick)
             return;
 
         _lastTick = snapshot.Tick;
 
-        int myId = ClientContext.PlayerId;
+        // 1. Tick 기반 시작 시퀀스 처리
+        gameStartSequenceController.ApplyTick(snapshot.Tick);
+
+        // 2. 게임 시작 전에는 게임 상태 렌더링하지 않음
+        if (!gameStartSequenceController.IsGameStarted)
+            return;
+
+        // 3. 게임 상태 적용
+        ApplyGameState(snapshot);
+    }
+
+    public void ApplyGameState(GameStateSnapshot snapshot)
+    {
+        long myId = ClientContext.PlayerId;
 
         PlayerSnapshot mySnapshot = null;
         PlayerSnapshot opponentSnapshot = null;
@@ -75,6 +88,7 @@ public class GameStateController : MonoBehaviour
             Debug.LogError("Opponent snapshot not found");
             return;
         }
+
 
         // 내 Lane은 항상 왼쪽
         myLaneView.UpdateLane(mySnapshot.Lane, mySnapshot.Speed);

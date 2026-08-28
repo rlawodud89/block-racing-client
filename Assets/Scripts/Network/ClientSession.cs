@@ -96,7 +96,7 @@ public class ClientSession
         {
             if (_isConnected)
             {
-                Debug.Log(ex);
+                Debug.LogWarning(ex);
 
                 HandleUnexpectedDisconnect();
             }

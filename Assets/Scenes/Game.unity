@@ -2958,6 +2958,7 @@ MonoBehaviour:
   opponentFinishLineView: {fileID: 619360673}
   myPlayerUI: {fileID: 6967731298968786237}
   inputController: {fileID: 1962289276}
+  gameStartSequenceController: {fileID: 999716127}
 --- !u!4 &731180665
 Transform:
   m_ObjectHideFlags: 0
