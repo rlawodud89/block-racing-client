@@ -49,6 +49,8 @@ public class GameStartSequenceController : MonoBehaviour
         _startTick = packet.StartTick;
         _isGameStarted = false;
 
+        GameBalance.ShootCooldownTime = packet.ShootCooldownTime;
+
         countdownUI.StartCountdown(_startTick);
     }
 

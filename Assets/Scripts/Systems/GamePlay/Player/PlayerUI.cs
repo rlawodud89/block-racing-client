@@ -18,7 +18,6 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private GameObject cooldownRoot;
     [SerializeField] private Image cooldownImage;
 
-    private const float ShootCooldownTime = 1.5f;
     private const float CellSize = 50f;
     private const float CooldownRotationSpeed = 360f;
 
@@ -115,6 +114,6 @@ public class PlayerUI : MonoBehaviour
 
         // 남은 쿨타임 비율
         cooldownImage.fillAmount =
-            remaining / ShootCooldownTime;
+            remaining / GameBalance.ShootCooldownTime;
     }
 }
