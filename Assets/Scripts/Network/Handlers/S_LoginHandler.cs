@@ -5,9 +5,6 @@ public static class S_LoginHandler
 {
     public static void Handle(S_LoginPacket packet)
     {
-        ClientLogger.Game(
-           $"Login succeeded. PlayerId={packet.PlayerId}");
-
         ClientContext.SetLogin(
             packet.PlayerId,
             packet.Nickname

@@ -10,9 +10,6 @@ public static class S_RoomCreatedHandler
     {
         if (packet.Result != RoomCreateResult.Success)
         {
-            ClientLogger.Warning(
-                $"Failed to create room. Result={packet.Result}");
-
             RoomEvents.RaiseRoomCreateFailed(packet.Result);
             return;
         }

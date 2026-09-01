@@ -124,6 +124,9 @@ public class ResultController : MonoBehaviour
 
     private void HandleOpponentExited()
     {
+        ClientLogger.Game(
+            "Opponent exited the room.");
+
         rematchButton.interactable = false;
 
         rematchPanel.SetActive(true);

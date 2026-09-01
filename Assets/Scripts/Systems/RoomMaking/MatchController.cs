@@ -26,6 +26,9 @@ public class MatchController : MonoBehaviour
 
     private void HandleRoomReady()
     {
+        ClientLogger.Game(
+            $"Room ready. RoomId={MatchContext.RoomId}");
+
         StopMatchingUI();
     }
 
