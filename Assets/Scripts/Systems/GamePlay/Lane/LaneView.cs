@@ -66,7 +66,7 @@ public class LaneView : MonoBehaviour
 
         if (_blocks.Length != Width * Height)
         {
-            Debug.LogError(
+            ClientLogger.Error(
                 $"Expected {Width * Height} blocks, but found {_blocks.Length}.");
         }
     }
@@ -75,26 +75,26 @@ public class LaneView : MonoBehaviour
     {
         if (snapshot == null)
         {
-            Debug.LogError("LaneSnapshot is null");
+            ClientLogger.Error("LaneSnapshot is null.");
             return;
         }
 
         if (_blocks == null)
         {
-            Debug.LogError("Block cache is null");
+            ClientLogger.Error("Block cache is null.");
             return;
         }
 
         if (snapshot.Blocks.Length != Width * Height)
         {
-            Debug.LogError(
-                $"Invalid block size : {snapshot.Blocks.Length}");
+            ClientLogger.Error(
+                $"Invalid block size: {snapshot.Blocks.Length}");
             return;
         }
 
         if (_blocks.Length != snapshot.Blocks.Length)
         {
-            Debug.LogError("Block count mismatch.");
+            ClientLogger.Error("Block count mismatch.");
             return;
         }
 

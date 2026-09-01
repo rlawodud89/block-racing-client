@@ -7,8 +7,6 @@ public static class S_HeartbeatHandler
 {
     public static void Handle(S_HeartbeatPacket packet)
     {
-        Debug.Log("S_Heartbeat 수신");
-
         NetworkManager.Instance.UpdateHeartbeat();
     }
 }

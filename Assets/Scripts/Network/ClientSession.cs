@@ -31,19 +31,47 @@ public class ClientSession
 
     public async Task ConnectAsync(string ip, int port)
     {
-        _client = new TcpClient();
+        try
+        {
+            _client = new TcpClient();
 
-        await _client.ConnectAsync(ip, port);
+            await _client.ConnectAsync(ip, port);
 
-        _stream = _client.GetStream();
+            _stream = _client.GetStream();
 
-        _isConnected = true;
-        _disconnectRaised = false;
+            _isConnected = true;
+            _disconnectRaised = false;
 
-        _lastHeartbeatTime = DateTime.UtcNow;
+            _lastHeartbeatTime = DateTime.UtcNow;
 
-        _ = ReceiveLoopAsync();
-        _ = HeartbeatTimeoutLoopAsync();
+            ClientLogger.Network(
+                   $"Connected to server. Address={ip}:{port}");
+
+            _ = ReceiveLoopAsync();
+            _ = HeartbeatTimeoutLoopAsync();
+        }
+        catch (SocketException ex)
+        {
+            ClientLogger.Warning(
+                $"Failed to connect to server. " +
+                $"Address={ip}:{port}. " +
+                $"Retrying...\n{ex.Message}");
+
+            Disconnect();
+
+            throw;
+        }
+        catch (Exception ex)
+        {
+            ClientLogger.Warning(
+                $"Unexpected connection failure. " +
+                $"Address={ip}:{port}\n{ex}");
+
+            Disconnect();
+
+            throw;
+        }
+
     }
 
     public async Task SendAsync(IPacket packet)
@@ -51,13 +79,28 @@ public class ClientSession
         if (!_isConnected)
             return;
 
-        var writer = new PacketWriter((ushort)packet.PacketId);
+        try
+        {
+            var writer =
+                new PacketWriter((ushort)packet.PacketId);
 
-        packet.Write(writer);
+            packet.Write(writer);
 
-        byte[] buffer = writer.ToArray();
+            byte[] buffer = writer.ToArray();
 
-        await _stream.WriteAsync(buffer, 0, buffer.Length);
+            await _stream.WriteAsync(buffer, 0, buffer.Length);
+        }
+        catch (Exception ex)
+        {
+            if (!_isConnected)
+                return;
+
+            ClientLogger.Error(
+                $"Failed to send packet. " +
+                $"Packet={packet.PacketId}\n{ex}");
+
+            HandleUnexpectedDisconnect();
+        }
     }
 
     private async Task ReceiveLoopAsync()
@@ -78,6 +121,9 @@ public class ClientSession
                 {
                     if (_isConnected)
                     {
+                        ClientLogger.Warning(
+                            "Server closed the connection.");
+
                         HandleUnexpectedDisconnect();
                     }
 
@@ -96,7 +142,8 @@ public class ClientSession
         {
             if (_isConnected)
             {
-                Debug.LogWarning(ex);
+                ClientLogger.Warning(
+                    $"Receive loop failed.\n{ex}");
 
                 HandleUnexpectedDisconnect();
             }
@@ -109,16 +156,26 @@ public class ClientSession
 
     private void ProcessPacket(byte[] packet)
     {
-        PacketReader reader = new(packet);
+        try
+        {
+            PacketReader reader = new(packet);
 
-        // Length skip
-        ushort length = reader.ReadUInt16();
+            // Length skip
+            ushort length = reader.ReadUInt16();
 
-        ushort packetId = reader.ReadUInt16();
+            ushort packetId = reader.ReadUInt16();
 
-        PacketId id = (PacketId)packetId;
+            PacketId id = (PacketId)packetId;
 
-        _packetManager.Process(id, reader);
+            _packetManager.Process(id, reader);
+        }
+        catch (Exception ex)
+        {
+            ClientLogger.Error(
+                $"Failed to process received packet.\n{ex}");
+
+            HandleUnexpectedDisconnect();
+        }
     }
 
     private async Task HeartbeatTimeoutLoopAsync()
@@ -133,7 +190,8 @@ public class ClientSession
             if (DateTime.UtcNow - _lastHeartbeatTime
                 > TimeSpan.FromMilliseconds(HeartbeatTimeout))
             {
-                Debug.Log("Heartbeat Timeout");
+                ClientLogger.Warning(
+                    "Heartbeat timeout.");
 
                 HandleUnexpectedDisconnect();
                 break;
@@ -164,12 +222,13 @@ public class ClientSession
 
     private void RaiseDisconnected()
     {
-        Debug.Log("RaiseDisconnected");
-
         if (_disconnectRaised)
             return;
 
         _disconnectRaised = true;
+
+        ClientLogger.Network(
+            "Disconnected event raised.");
 
         NetworkEvents.RaiseDisconnected();
     }

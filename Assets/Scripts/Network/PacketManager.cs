@@ -46,7 +46,8 @@ public class PacketManager
         }
         else
         {
-            Console.WriteLine($"Unknown Packet : {id}");
+            ClientLogger.Warning(
+                $"Unknown packet received. Packet={id}");
         }
     }
 }

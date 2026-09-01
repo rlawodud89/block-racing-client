@@ -7,8 +7,6 @@ public static class S_GameEndHandler
 {
     public static void Handle(S_GameEndPacket packet)
     {
-        Debug.Log($"Game Ended. Result: {packet.Result}");
-
         GameEvents.InvokeGameEnded(packet);
     }
 }

@@ -46,6 +46,9 @@ public class GameStartSequenceController : MonoBehaviour
 
     private void StartGame(S_StartGamePacket packet)
     {
+        ClientLogger.Game(
+            $"Game start received. RoomId={packet.RoomId}");
+
         _startTick = packet.StartTick;
         _isGameStarted = false;
 

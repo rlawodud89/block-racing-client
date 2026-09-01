@@ -26,6 +26,9 @@ public class MatchController : MonoBehaviour
 
     private void HandleRoomReady()
     {
+        ClientLogger.Game(
+            $"Room ready. RoomId={MatchContext.RoomId}");
+
         StopMatchingUI();
     }
 
@@ -43,6 +46,9 @@ public class MatchController : MonoBehaviour
 
     private void StartMatch()
     {
+        ClientLogger.Game(
+            "Matchmaking started.");
+
         var packet = new C_MatchRequestPacket
         {
             IsMatch = true
@@ -63,6 +69,9 @@ public class MatchController : MonoBehaviour
 
     private void CancelMatch()
     {
+        ClientLogger.Game(
+            "Matchmaking canceled.");
+
         var packet = new C_MatchRequestPacket
         {
             IsMatch = false

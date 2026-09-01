@@ -25,7 +25,7 @@ public class PlayerUI : MonoBehaviour
     {
         if (snapshot == null)
         {
-            Debug.LogError("PlayerSnapshot is null.");
+            ClientLogger.Error("PlayerSnapshot is null.");
             return;
         }
 

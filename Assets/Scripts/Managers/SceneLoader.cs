@@ -29,39 +29,36 @@ public class SceneLoader : MonoBehaviour
     {
         if (_isLoading)
         {
-            Debug.LogWarning(
-                $"[SceneLoader] Scene change already in progress. " +
-                $"Ignore: {nextScene}"
-            );
+            ClientLogger.Warning(
+                $"Scene change already in progress. " +
+                $"Ignored={nextScene}");
 
             yield break;
         }
 
         _isLoading = true;
 
-        // æ¿ ¿¸»Ø Ω√ ±‚¡∏ WarningUI ¥›±‚
+        // Ïî¨ Ï†ÑÌôò Ïãú Í∏∞Ï°¥ WarningUI Îã´Í∏∞
         WarningUI.Instance?.Hide();
 
         Scene currentScene = SceneManager.GetActiveScene();
 
-        // ¿ÃπÃ ∑ŒµÂµ«æÓ ¿÷¥¬¡ˆ »Æ¿Œ
+        // Ïù¥ÎØ∏ Î°úÎìúÎêòÏñ¥ ÏûàÎäîÏßÄ ÌôïÏù∏
         Scene existingScene =
             SceneManager.GetSceneByName(nextScene);
 
         if (existingScene.IsValid() && existingScene.isLoaded)
         {
-            Debug.LogWarning(
-                $"[SceneLoader] Already loaded: {nextScene}"
-            );
+            ClientLogger.Warning(
+                $"Scene already loaded. Scene={nextScene}");
 
             _isLoading = false;
             yield break;
         }
 
-        Debug.Log(
-            $"[SceneLoader] Loading: " +
-            $"{currentScene.name} -> {nextScene}"
-        );
+        ClientLogger.Game(
+            $"Loading scene. " +
+            $"From={currentScene.name}, To={nextScene}");
 
         AsyncOperation loadOperation =
             SceneManager.LoadSceneAsync(
@@ -71,9 +68,9 @@ public class SceneLoader : MonoBehaviour
 
         if (loadOperation == null)
         {
-            Debug.LogError(
-                $"[SceneLoader] Failed to load: {nextScene}"
-            );
+            ClientLogger.Error(
+                $"Failed to start scene loading. " +
+                $"Scene={nextScene}");
 
             _isLoading = false;
             yield break;
@@ -89,18 +86,18 @@ public class SceneLoader : MonoBehaviour
 
         if (!next.IsValid() || !next.isLoaded)
         {
-            Debug.LogError(
-                $"[SceneLoader] Failed to load: {nextScene}"
-            );
+            ClientLogger.Error(
+                $"Scene loading failed. " +
+                $"Scene={nextScene}");
 
             _isLoading = false;
             yield break;
         }
 
-        // Active Scene ∫Ø∞Ê
+        // Active Scene Î≥ÄÍ≤Ω
         SceneManager.SetActiveScene(next);
 
-        // ¿Ã¿¸ æ¿ ¡¶∞≈
+        // Ïù¥Ï†Ñ Ïî¨ Ï†úÍ±∞
         if (currentScene.name != "Bootstrap" &&
             currentScene.IsValid() &&
             currentScene.isLoaded)
@@ -119,8 +116,8 @@ public class SceneLoader : MonoBehaviour
 
         _isLoading = false;
 
-        Debug.Log(
-            $"[SceneLoader] Scene change complete: {nextScene}"
-        );
+        ClientLogger.Game(
+            $"Scene change complete. " +
+            $"Scene={nextScene}");
     }
 }

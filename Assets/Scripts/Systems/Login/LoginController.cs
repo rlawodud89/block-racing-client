@@ -10,7 +10,7 @@ public class LoginController : MonoBehaviour
 
     private void Awake()
     {
-        LoginEvents.OnLoginSuccess += LoadLobby;
+        LoginEvents.OnLoginSuccess += HandleLoginSuccess;
 
         NetworkEvents.OnConnected += EnableLoginButton;
         NetworkEvents.OnDisconnected += DisableLoginButton;
@@ -20,7 +20,7 @@ public class LoginController : MonoBehaviour
 
     private void OnDestroy()
     {
-        LoginEvents.OnLoginSuccess -= LoadLobby;
+        LoginEvents.OnLoginSuccess -= HandleLoginSuccess;
 
         NetworkEvents.OnConnected -= EnableLoginButton;
         NetworkEvents.OnDisconnected -= DisableLoginButton;
@@ -51,8 +51,11 @@ public class LoginController : MonoBehaviour
         await NetworkManager.Instance.SendAsync(packet);
     }
 
-    private void LoadLobby()
+    private void HandleLoginSuccess()
     {
+        ClientLogger.Game(
+            $"Login succeeded. PlayerId={ClientContext.PlayerId}");
+
         SceneLoader.Instance.LoadScene("Lobby");
     }
 }

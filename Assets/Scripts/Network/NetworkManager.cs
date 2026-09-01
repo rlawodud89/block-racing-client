@@ -44,14 +44,13 @@ public class NetworkManager : MonoBehaviour
 
     private void CreateSession()
     {
-        Debug.Log("CreateSession");
-
         _session = new ClientSession(_packetManager);
     }
 
     private void HandleDisconnected()
     {
-        Debug.Log("HandleDisconnected");
+        ClientLogger.Network(
+            "Disconnected from server.");
 
         SceneLoader.Instance.LoadScene("Title");
 
@@ -75,9 +74,12 @@ public class NetworkManager : MonoBehaviour
                 {
                     CreateSession();
 
-                    await _session.ConnectAsync("127.0.0.1", 7777);
+                    await _session.ConnectAsync(
+                        "127.0.0.1",
+                        7777);
 
-                    Debug.Log("서버 연결 성공");
+                    ClientLogger.Network(
+                        "Connection established.");
 
                     WarningUI.Instance.Show("서버에 연결되었습니다.");
 
@@ -87,13 +89,17 @@ public class NetworkManager : MonoBehaviour
                 }
                 catch (SocketException ex)
                 {
-                    Debug.Log($"서버 연결 실패: {ex.Message}");
+                    ClientLogger.Warning(
+                        $"Connection attempt failed. " +
+                        $"Retrying in 2 seconds.\n{ex}");
 
                     await Task.Delay(2000);
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogWarning(ex);
+                    ClientLogger.Error(
+                        $"Unexpected error during connection. {ex}");
+
                     break;
                 }
             }

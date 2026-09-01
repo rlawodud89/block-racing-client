@@ -102,7 +102,7 @@ public class ResultController : MonoBehaviour
     {
         rematchButton.interactable = false;
 
-        var packet = new C_RematchReqeustPacket();
+        var packet = new C_RematchRequestPacket();
 
         NetworkManager.Instance.SendAsync(packet);
 
@@ -124,6 +124,9 @@ public class ResultController : MonoBehaviour
 
     private void HandleOpponentExited()
     {
+        ClientLogger.Game(
+            "Opponent exited the room.");
+
         rematchButton.interactable = false;
 
         rematchPanel.SetActive(true);

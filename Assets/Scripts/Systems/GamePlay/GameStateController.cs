@@ -79,13 +79,15 @@ public class GameStateController : MonoBehaviour
 
         if (mySnapshot == null)
         {
-            Debug.LogError($"My snapshot not found. MyId={myId}");
+            ClientLogger.Error(
+                $"My snapshot not found. MyId={myId}");
             return;
         }
 
         if (opponentSnapshot == null)
         {
-            Debug.LogError("Opponent snapshot not found");
+            ClientLogger.Error(
+                "Opponent snapshot not found.");
             return;
         }
 
