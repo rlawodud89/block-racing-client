@@ -17,9 +17,6 @@ public static class S_RoomCreatedHandler
             return;
         }
 
-        ClientLogger.Game(
-            $"Private room created. RoomCode={packet.RoomCode}");
-
         RoomEvents.RaiseRoomCreated(packet.RoomCode);
     }
 }

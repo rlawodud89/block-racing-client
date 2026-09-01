@@ -50,14 +50,26 @@ public class ClientSession
             _ = ReceiveLoopAsync();
             _ = HeartbeatTimeoutLoopAsync();
         }
+        catch (SocketException ex)
+        {
+            ClientLogger.Warning(
+                $"Failed to connect to server. " +
+                $"Address={ip}:{port}. " +
+                $"Retrying...\n{ex.Message}");
+
+            Disconnect();
+
+            throw;
+        }
         catch (Exception ex)
         {
-            ClientLogger.Error(
-                $"Failed to connect to server. " +
+            ClientLogger.Warning(
+                $"Unexpected connection failure. " +
                 $"Address={ip}:{port}\n{ex}");
 
             Disconnect();
-            RaiseDisconnected();
+
+            throw;
         }
 
     }
