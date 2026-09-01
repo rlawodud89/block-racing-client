@@ -32,10 +32,6 @@ public class FlyingBlockView : MonoBehaviour
                 snapshot.Y * CellHeight
             );
 
-        Debug.Log(
-            $"FlyingBlock RectPos : {_rect.anchoredPosition}, Snapshot : {snapshot.X},{snapshot.Y}"
-        );
-
         UpdateShape(snapshot);
     }
 

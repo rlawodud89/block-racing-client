@@ -7,6 +7,9 @@ public static class S_OpponentExitHandler
 {
     public static void Handle(S_OpponentExitPacket packet)
     {
+        ClientLogger.Game(
+            "Opponent exited the room.");
+
         GameEvents.RaiseOpponentExited();
     }
 }

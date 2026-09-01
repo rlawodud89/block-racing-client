@@ -10,9 +10,15 @@ public static class S_RoomJoinedHandler
     {
         if (packet.Result != RoomJoinResult.Success)
         {
+            ClientLogger.Warning(
+                $"Failed to join room. Result={packet.Result}");
+
             RoomEvents.RaiseRoomJoinFailed(packet.Result);
             return;
         }
+
+        ClientLogger.Game(
+            $"Joined room. RoomId={packet.RoomId}");
 
         RoomEvents.RaiseRoomJoined(packet.RoomId);
     }

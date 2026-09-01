@@ -7,8 +7,8 @@ public static class S_RoomReadyHandler
 {
     public static void Handle(S_RoomReadyPacket packet)
     {
-        Debug.Log(
-            $"Match Found. RoomId : {packet.RoomId}");
+        ClientLogger.Game(
+            $"Room ready. RoomId={packet.RoomId}");
 
         MatchContext.RoomId = packet.RoomId;
 

@@ -21,17 +21,19 @@ public class GameSceneManager : MonoBehaviour
 
             await NetworkManager.Instance.SendAsync(new C_ReadyPacket());
 
-            Debug.Log("Game Ready Sent");
+            ClientLogger.Packet("C_Ready packet sent.");
         }
-        catch (System.Exception e)
+        catch (System.Exception ex)
         {
-            Debug.LogError(e);
+            ClientLogger.Error(
+                $"Failed to send game ready packet.\n{ex}");
         }
     }
 
     private void HandleMatchCanceled()
     {
-        Debug.Log("Match canceled");
+        ClientLogger.Game(
+            "Game canceled. Loading MatchCanceled scene.");
 
         SceneLoader.Instance.LoadScene("MatchCanceled");
     }

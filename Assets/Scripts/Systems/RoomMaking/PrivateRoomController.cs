@@ -56,7 +56,10 @@ public class PrivateRoomController : MonoBehaviour
         string roomCode = roomCodeInput.text.Trim().ToUpperInvariant();
 
         if (string.IsNullOrEmpty(roomCode))
+        {
+            ClientLogger.Warning("Join room requested with empty room code.");
             return;
+        }
 
         var packet = new C_JoinRoomPacket
         {
@@ -75,20 +78,25 @@ public class PrivateRoomController : MonoBehaviour
 
     private void HandleRoomCreated(string roomCode)
     {
+        ClientLogger.Game(
+            $"Private room created. RoomCode={roomCode}");
+
         createRoomPanel.SetActive(true);
         roomCodeText.text = $"방 입장 코드\n{roomCode}";
     }
 
     private void HandleRoomJoined(long roomId)
     {
-        Debug.Log($"Room Joined. RoomId={roomId}");
+        ClientLogger.Game(
+           $"Joined private room. RoomId={roomId}");
 
         joinRoomPanel.SetActive(false);
     }
 
     private void HandleRoomCreateFailed(RoomCreateResult result)
     {
-        Debug.Log($"Room Create Failed. Result={result}");
+        ClientLogger.Warning(
+             $"Private room creation failed. Result={result}");
 
         switch (result)
         {
@@ -112,7 +120,8 @@ public class PrivateRoomController : MonoBehaviour
 
     private void HandleRoomJoinFailed(RoomJoinResult result)
     {
-        Debug.Log($"Room Join Failed. Result={result}");
+        ClientLogger.Warning(
+             $"Private room join failed. Result={result}");
 
         switch (result)
         {
