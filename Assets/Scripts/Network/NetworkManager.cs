@@ -12,6 +12,8 @@ public class NetworkManager : MonoBehaviour
     private PacketManager _packetManager;
     private ClientSession _session;
 
+    private ServerConfig _serverConfig;
+
     private bool _isConnecting;
     private bool _isRunning = true;
 
@@ -40,6 +42,7 @@ public class NetworkManager : MonoBehaviour
     private void InitializeNetwork()
     {
         _packetManager = new PacketManager();
+        _serverConfig = ServerConfig.Load();
     }
 
     private void CreateSession()
@@ -64,6 +67,15 @@ public class NetworkManager : MonoBehaviour
         if (_isConnecting)
             return;
 
+        if (_serverConfig == null)
+        {
+            ClientLogger.Error(
+                "Server configuration is not available.");
+
+            return;
+        }
+
+
         _isConnecting = true;
 
         try
@@ -75,8 +87,8 @@ public class NetworkManager : MonoBehaviour
                     CreateSession();
 
                     await _session.ConnectAsync(
-                        "127.0.0.1",
-                        7777);
+                            _serverConfig.serverIp,
+                            _serverConfig.serverPort);
 
                     ClientLogger.Network(
                         "Connection established.");
