@@ -6,8 +6,7 @@ public static class S_LoginHandler
     public static void Handle(S_LoginPacket packet)
     {
         ClientContext.SetLogin(
-            packet.PlayerId,
-            packet.Nickname
+            packet.PlayerId
         );
 
         LoginEvents.RaiseSuccess();

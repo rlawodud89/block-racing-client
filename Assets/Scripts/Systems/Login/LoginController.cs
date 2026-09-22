@@ -43,10 +43,7 @@ public class LoginController : MonoBehaviour
 
     private async void SendLogin()
     {
-        var packet = new C_LoginPacket()
-        {
-            Nickname = "TestPlayer"
-        };
+        var packet = new C_LoginPacket();
 
         await NetworkManager.Instance.SendAsync(packet);
     }
