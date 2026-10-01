@@ -38,7 +38,6 @@ Client는 게임 결과를 직접 판정하지 않고, Server의 입력 처리 �
              ┌──────┴──────┐             ┌─────┴─────┐
              ▼             ▼             ▼           ▼
             UI        Game Systems      Lane        Car / Player
-                                               
 ```
 
 Network Layer는 Server와의 연결 및 Packet 처리를 담당하고, Handler는 수신한 Packet을 Event 또는 Game State 처리로 전달한다.
@@ -49,13 +48,13 @@ Network Layer는 Server와의 연결 및 Packet 처리를 담당하고, Handler�
 
 | 영역 | 주요 클래스 | 역할 |
 | --- | --- | --- |
-| Network | `NetworkManager`, `ClientSession` | TCP 연결, 송수신, Heartbeat, Disconnect |
-| Packet | `PacketManager`, Handlers | Packet 역직렬화 및 Packet별 처리 |
-| Data | `ClientContext`, `MatchContext`, `ResultData` | Client 전역 상태 및 화면 전환에 필요한 데이터 보관 |
+| Network | [NetworkManager](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Network/NetworkManager.cs), [ClientSession](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Network/ClientSession.cs) | TCP 연결, 송수신, Heartbeat, Disconnect |
+| Packet | [PacketManager](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Network/PacketManager.cs), Handlers | Packet 역직렬화 및 Packet별 처리 |
+| Data | `ClientContext`, `MatchContext`, `ResultData` | Client 상태 및 화면 전환에 필요한 데이터 보관 |
 | Events | `NetworkEvents`, `RoomEvents`, `GameEvents`, `LoginEvents` | Network와 UI / Game System 간 상태 전달 |
-| Game System | `GameStateController`, `GameStartSequenceController`, `InputController` | 게임 상태 적용, 시작 시퀀스, 사용자 입력 처리 |
-| View | `LaneView`, `CarView`, `BlockView`, `FlyingBlockView`, `PlayerUI` | 전달받은 상태를 Unity Object와 UI로 표현 |
-| Manager | `SceneLoader`, `AudioManager`, `BootstrapLoader` | Scene 및 Client 공통 기능 관리 |
+| Game System | [GameStateController](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/GameStateController.cs), [GameStartSequenceController](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GameStart/GameStartSequenceController.cs), [InputController](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Player/InputController.cs) | 게임 상태 적용, 시작 시퀀스, 사용자 입력 처리 |
+| View | [LaneView](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Lane/LaneView.cs), [CarView](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Car/CarView.cs), [BlockView](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Block/BlockView.cs), [FlyingBlockView](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Block/FlyingBlockView.cs), `PlayerUI` | 전달받은 상태를 Unity Object와 UI로 표현 |
+| Manager | [SceneLoader](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Managers/SceneLoader.cs), `AudioManager`, `BootstrapLoader` | Scene 및 Client 공통 기능 관리 |
 
 ---
 
@@ -65,13 +64,12 @@ Network Layer는 Server와의 TCP 연결 생명주기와 Packet 송수신을 담
 
 ### NetworkManager
 
-`NetworkManager`는 Client의 네트워크 진입점으로 동작한다.
+[NetworkManager](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Network/NetworkManager.cs)는 Client의 네트워크 진입점으로 동작한다.
 
-- `ClientSession` 생성
-- Server 연결 및 재연결
+- `ClientSession` 생성 및 연결 관리
 - Packet 전송
-- Heartbeat 갱신
-- Disconnect 이벤트 처리
+- Heartbeat 처리
+- Disconnect 처리
 
 ```text
 NetworkManager
@@ -86,11 +84,11 @@ NetworkManager
             └── Scene / UI 처리
 ```
 
-`NetworkManager`는 `DontDestroyOnLoad`로 유지되어 Scene 전환 이후에도 연결을 유지한다.
+`NetworkManager`는 Scene 전환 이후에도 연결을 유지할 수 있도록 전역 객체로 관리된다.
 
 ### ClientSession
 
-`ClientSession`은 실제 TCP 연결과 송수신을 담당한다.
+[ClientSession](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Network/ClientSession.cs)은 실제 TCP 연결과 송수신을 담당한다.
 
 ```text
 ClientSession
@@ -102,13 +100,13 @@ ClientSession
 └── HeartbeatTimeoutLoopAsync()
 ```
 
-수신 데이터는 `ReceiveBuffer`에 누적한 뒤 Packet 단위로 분리하고, `PacketManager`를 통해 처리한다.
+수신 데이터는 `ReceiveBuffer`에서 Packet 단위로 분리한 뒤 `PacketManager`로 전달한다.
 
 ---
 
 ## Packet Processing
 
-Client는 Packet ID를 기준으로 수신 Packet의 Handler를 선택한다.
+Client는 Packet ID를 기준으로 등록된 Handler를 선택한다.
 
 ```text
 TCP Receive
@@ -126,9 +124,9 @@ Handler
     └── GameStateController
 ```
 
-`PacketManager`는 Packet ID와 Handler를 등록하고, Packet을 역직렬화한 뒤 해당 Handler를 호출한다.
+[PacketManager](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Network/PacketManager.cs)는 Packet ID별 Handler를 등록하고, 등록된 Handler에 `PacketReader`를 전달한다. 각 Handler는 Reader를 사용해 자신의 Packet을 역직렬화한 뒤 처리한다.
 
-예를 들어 게임 상태 Packet은 다음과 같이 처리된다.
+게임 상태 Packet은 다음과 같이 처리된다.
 
 ```text
 S_GameStatePacket
@@ -191,21 +189,19 @@ GameStateSnapshot
 View Components
 ```
 
-`GameStateController`는 Snapshot의 Tick을 확인하여 이전 상태보다 오래된 Snapshot을 무시한다.
-
-이후 자신의 `PlayerId`를 기준으로 자신의 상태와 상대방 상태를 구분하여 각각의 View에 전달한다.
+[GameStateController](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/GameStateController.cs)는 Snapshot의 Tick을 검증하고, 자신의 `PlayerId`를 기준으로 두 Player의 상태를 분리하여 각 View에 전달한다.
 
 ```text
 GameStateController
-    ├── My Lane      → LaneView
+    ├── My Lane       → LaneView
     ├── Opponent Lane → LaneView
-    ├── My Car       → CarView
-    ├── Opponent Car → CarView
-    ├── Finish Line  → FinishLineView
-    └── Player UI    → PlayerUI
+    ├── My Car        → CarView
+    ├── Opponent Car  → CarView
+    ├── Finish Line   → FinishLineView
+    └── Player UI     → PlayerUI
 ```
 
-Snapshot의 생성 및 데이터 구조는 Server의 `snapshot.md`에서 별도로 다룬다.
+Snapshot의 생성과 Server 전송 구조는 Server의 [snapshot.md](https://github.com/rlawodud89/block-racing-server/blob/docs/add-docs/docs/snapshot.md)에서 다루며, Client의 실제 Snapshot 적용 과정은 [snapshot-rendering.md](snapshot-rendering.md)에서 별도로 다룬다.
 
 ---
 
@@ -229,7 +225,7 @@ Server
 
 현재 입력은 이동, 회전, 모드 변경, 공격 등의 `InputType`으로 전달된다.
 
-게임 시작 전에는 입력을 비활성화하고, `GameStartSequenceController`가 시작 Tick에 도달하면 `OnGameStarted` 이벤트를 통해 입력을 활성화한다.
+게임 시작 전에는 입력을 비활성화하고, [GameStartSequenceController](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GameStart/GameStartSequenceController.cs)가 Server Tick을 기준으로 시작 시퀀스를 진행한 뒤 입력을 활성화한다.
 
 ---
 
@@ -279,7 +275,7 @@ Lobby
              Lobby
 ```
 
-Scene 전환은 `SceneLoader`가 담당하며, Additive Scene Load 후 기존 Scene을 Unload하는 방식으로 전환한다.
+Scene 전환은 [SceneLoader](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Managers/SceneLoader.cs)가 담당한다.
 
 주요 Scene:
 
@@ -317,7 +313,7 @@ Client Input
  Rendering
 ```
 
-Client의 책임은 크게 다음과 같이 분리된다.
+Client의 책임은 다음과 같이 분리된다.
 
 - 사용자 입력 수집 및 Server 전달
 - Server Packet 수신 및 처리
