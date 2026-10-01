@@ -1,8 +1,8 @@
 # Snapshot Rendering
 
-Client는 Server가 전달한 GameStateSnapshot을 기준으로 현재 게임 화면을 갱신한다.
+Client는 Server가 전달한 `GameStateSnapshot`을 기준으로 현재 게임 화면을 갱신한다.
 
-Snapshot 자체의 생성과 Server 전송 구조는 Server의 snapshot.md에서 다루며, 이 문서에서는 Client가 수신한 Snapshot을 어떻게 검증하고 게임 화면에 적용하는지를 다룬다.
+Snapshot 자체의 생성과 Server 전송 구조는 Server의 [snapshot.md](https://github.com/rlawodud89/block-racing-server/blob/docs/add-docs/docs/snapshot.md)에서 다루며, 이 문서에서는 Client가 수신한 Snapshot을 어떻게 검증하고 게임 화면에 적용하는지를 다룬다.
 
 ---
 
@@ -32,13 +32,13 @@ FlyingBlocks  Stun State     Mode
 Lane Scroll                  Shoot Cooldown
 ```
 
-Snapshot을 받은 뒤 GameStateController가 전체 적용 과정을 조정하고, 각 View Component가 실제 Unity Object를 갱신한다.
+Snapshot을 받은 뒤 [GameStateController](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/GameStateController.cs)가 전체 적용 과정을 조정하고, 각 View Component가 실제 Unity Object를 갱신한다.
 
 ---
 
 ## Snapshot Reception
 
-게임 상태 Packet은 S_GameStateHandler에서 처리한다.
+게임 상태 Packet은 [S_GameStateHandler](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Network/Handlers/S_GameStateHandler.cs)에서 처리한다.
 
 ```csharp
 public static void Handle(S_GameStatePacket packet)
@@ -76,10 +76,10 @@ snapshot.Tick <= _lastTick ?
  ┌────┴────┐
 Yes        No
  │          │
-Ignore   Apply Snapshot
+Ignore   Continue
 ```
 
-따라서 이미 처리한 Tick과 같거나 더 이전의 Snapshot이 도착하더라도 화면 상태를 되돌리지 않는다.
+이미 처리한 Tick과 같거나 더 이전의 Snapshot은 적용하지 않는다.
 
 ---
 
@@ -103,7 +103,7 @@ StartTick 도달
 Game Started
 ```
 
-GameStateController.ApplySnapshot()은 게임 상태를 적용하기 전에 GameStartSequenceController.ApplyTick(snapshot.Tick)을 호출한다.
+[GameStateController](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/GameStateController.cs)의 `ApplySnapshot()`은 게임 상태를 적용하기 전에 `GameStartSequenceController.ApplyTick(snapshot.Tick)`을 호출한다.
 
 게임 시작 전에는 Snapshot의 게임 상태를 View에 적용하지 않는다.
 
@@ -112,13 +112,13 @@ if (!gameStartSequenceController.IsGameStarted)
     return;
 ```
 
-이를 통해 Countdown과 실제 게임 상태 렌더링이 Server Tick 기준으로 동기화된다.
+이를 통해 Countdown과 실제 게임 상태 렌더링을 Server Tick 기준으로 동기화한다.
 
 ---
 
 ## Player Separation
 
-Snapshot에는 두 Player의 상태가 포함되며, Client는 자신의 PlayerId를 기준으로 자신의 Snapshot과 상대방 Snapshot을 구분한다.
+Snapshot에는 두 Player의 상태가 포함되며, Client는 자신의 `PlayerId`를 기준으로 자신의 Snapshot과 상대방 Snapshot을 구분한다.
 
 ```text
 GameStateSnapshot
@@ -142,7 +142,7 @@ GameStateSnapshot
 
 ## Lane Rendering
 
-LaneView는 LaneSnapshot을 받아 정착된 Block과 이동 중인 FlyingBlock을 갱신한다.
+[LaneView](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Lane/LaneView.cs)는 LaneSnapshot을 받아 정착된 Block과 이동 중인 FlyingBlock을 갱신한다.
 
 ```text
 LaneSnapshot
@@ -157,7 +157,7 @@ LaneSnapshot
 
 ### Settled Blocks
 
-Lane의 Block 데이터는 1차원 배열로 전달되며, Client는 미리 생성해 둔 BlockView 배열을 순회하면서 상태를 적용한다.
+Lane의 Block 데이터는 1차원 배열로 전달되며, Client는 미리 생성해 둔 [BlockView](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Block/BlockView.cs) 배열을 순회하면서 상태를 적용한다.
 
 ```csharp
 for (int i = 0; i < snapshot.Blocks.Length; i++)
@@ -166,13 +166,13 @@ for (int i = 0; i < snapshot.Blocks.Length; i++)
 }
 ```
 
-BlockView.SetBlock()은 Block 데이터가 비어 있으면 Image를 비활성화하고, Block이 존재하면 Image를 활성화한다.
+`BlockView.SetBlock()`은 Block 데이터가 비어 있으면 Image를 비활성화하고, Block이 존재하면 Image를 활성화한다.
 
 즉, Snapshot의 Block 상태를 기존 Unity Object에 적용하는 방식으로 렌더링한다.
 
 ### Flying Blocks
 
-FlyingBlock은 Snapshot 개수에 맞춰 FlyingBlockView를 생성하고, 현재 필요한 View만 활성화한다.
+FlyingBlock은 Snapshot 개수에 맞춰 [FlyingBlockView](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Block/FlyingBlockView.cs)를 생성하고, 현재 필요한 View만 활성화한다.
 
 ```text
 FlyingBlocks Snapshot
@@ -192,7 +192,7 @@ FlyingBlockView는 Snapshot의 X, Y, Type, Rotation을 사용하여 위치와 Bl
 
 ## Lane Scroll Rendering
 
-LaneView.UpdateLane()은 Snapshot의 Lane 상태와 함께 Car의 Speed를 전달받아 LaneScroller의 Scroll Speed를 갱신한다.
+[LaneView](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Lane/LaneView.cs)의 `UpdateLane()`은 Snapshot의 Lane 상태와 함께 Car의 Speed를 전달받아 [LaneScroller](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Lane/LaneScroller.cs)의 Scroll Speed를 갱신한다.
 
 ```text
 PlayerSnapshot
@@ -205,13 +205,13 @@ PlayerSnapshot
               └── FlyingBlockView Update
 ```
 
-따라서 Lane의 게임 상태와 Client의 화면상 Scroll 속도는 Snapshot에 포함된 Player Speed를 기준으로 갱신된다.
+따라서 Client의 화면상 Lane Scroll 속도는 Snapshot에 포함된 Player Speed를 기준으로 갱신된다.
 
 ---
 
 ## Car Rendering
 
-Car 상태는 별도의 CarSnapshot 객체를 사용하는 것이 아니라 PlayerSnapshot의 값을 CarView에 전달한다.
+Car 상태는 별도의 CarSnapshot 객체를 사용하는 것이 아니라 PlayerSnapshot의 값을 [CarView](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Car/CarView.cs)에 전달한다.
 
 ```text
 PlayerSnapshot
@@ -231,7 +231,7 @@ IsStunned가 true이면 Coroutine을 통해 Car의 투명도를 반복적으로 
 
 ## Player UI Rendering
 
-자신의 PlayerSnapshot은 게임 화면의 Player UI에도 사용된다.
+자신의 PlayerSnapshot은 게임 화면의 [PlayerUI](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Player/PlayerUI.cs)에도 사용된다.
 
 ```text
 PlayerSnapshot
@@ -245,7 +245,7 @@ PlayerSnapshot
 
 ### Current Piece
 
-CurrentPieceType과 CurrentPieceRotation을 사용하여 다음 사용할 Block의 Shape를 표시한다.
+CurrentPieceType과 CurrentPieceRotation을 사용하여 현재 사용할 Piece의 Shape를 표시한다.
 
 현재 Piece가 없는 경우 모든 UI Cell을 비활성화한다.
 
@@ -262,7 +262,7 @@ Attack  → 공격
 
 ShootCooldownRemaining을 사용하여 공격 쿨타임 UI를 갱신한다.
 
-동시에 같은 값을 InputController에도 전달한다.
+동시에 같은 값을 [InputController](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Player/InputController.cs)에도 전달한다.
 
 ```text
 PlayerSnapshot.ShootCooldownRemaining
@@ -280,7 +280,7 @@ Client는 Server가 전달한 쿨타임 상태를 기준으로 UI와 입력 가�
 
 ## State Application
 
-전체 게임 상태 적용은 GameStateController.ApplyGameState()에서 수행된다.
+전체 게임 상태 적용은 [GameStateController](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/GameStateController.cs)의 `ApplyGameState()`에서 수행된다.
 
 ```text
 GameStateSnapshot
@@ -339,12 +339,12 @@ Snapshot Rendering은 다음과 같은 책임 분리를 가진다.
 
 | 단계 | 책임 |
 | --- | --- |
-| S_GameStateHandler | Snapshot 전달 |
-| GameStateController | Tick 검증 및 전체 상태 적용 조정 |
-| LaneView | Lane / Block / FlyingBlock 렌더링 |
-| CarView | Car 위치 및 Stun 표현 |
-| PlayerUI | 현재 Piece / Mode / Cooldown UI |
-| InputController | Server 상태 기반 입력 가능 여부 반영 |
+| [S_GameStateHandler](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Network/Handlers/S_GameStateHandler.cs) | Snapshot 전달 |
+| [GameStateController](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/GameStateController.cs) | Tick 검증 및 전체 상태 적용 조정 |
+| [LaneView](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Lane/LaneView.cs) | Lane / Block / FlyingBlock 렌더링 |
+| [CarView](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Car/CarView.cs) | Car 위치 및 Stun 표현 |
+| [PlayerUI](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Player/PlayerUI.cs) | 현재 Piece / Mode / Cooldown UI |
+| [InputController](https://github.com/rlawodud89/block-racing-client/blob/main/Assets/Scripts/Systems/GamePlay/Player/InputController.cs) | Server 상태 기반 입력 가능 여부 반영 |
 
 전체 흐름은 다음과 같다.
 
